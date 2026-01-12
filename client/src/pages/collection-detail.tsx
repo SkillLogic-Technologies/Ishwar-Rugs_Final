@@ -50,7 +50,7 @@ export default function CollectionDetail() {
     );
   }
 
-  const galleryImages = collection.galleryImages?.length ? collection.galleryImages : [collection.heroImage];
+  const galleryImages: string[] = collection.galleryImages?.length ? collection.galleryImages : [collection.heroImage];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
@@ -93,6 +93,8 @@ export default function CollectionDetail() {
                   <img
                     src={galleryImages[currentImageIndex]}
                     alt={`${collection.name} - Image ${currentImageIndex + 1}`}
+                    loading={currentImageIndex === 0 ? "eager" : "lazy"}
+                    decoding="async"
                     className="w-full h-96 lg:h-[500px] object-cover"
                   />
                 ) : (
@@ -135,7 +137,12 @@ export default function CollectionDetail() {
                           : "border-transparent hover:border-primary-brown dark:hover:border-neutral-400"
                       }`}
                     >
-                      <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                      <img 
+                        src={image} 
+                        alt={`Thumbnail ${index + 1}`} 
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>
@@ -208,7 +215,7 @@ export default function CollectionDetail() {
                       <p className="text-sm font-semibold mb-2">Price: ₹ {product.price.toFixed(2)}</p>
                       {product.colors?.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-4">
-                          {product.colors.map((color, index) => (
+                          {product.colors.map((color: string, index: number) => (
                             <Badge key={index} variant="outline" className="text-xs">
                               {color}
                             </Badge>

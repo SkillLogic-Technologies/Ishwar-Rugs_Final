@@ -65,6 +65,9 @@ export default function Carousel360() {
               <img
                 src={src}
                 alt={`Portrait ${i + 1}`}
+                loading={i < 3 ? "eager" : "lazy"}   // first 2–3 fast load
+                decoding="async"                     // browser ko async decode bolta hai
+                // fetchpriority={i === 0 ? "high" : "auto"}
                 className="w-full h-full object-cover"
               />
             </SwiperSlide>

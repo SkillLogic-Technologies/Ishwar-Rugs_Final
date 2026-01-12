@@ -8,10 +8,19 @@ import CollectionGrid from "@/components/collection-grid";
 import { Button } from "@/components/ui/button";
 import Carousel3D from "@/components/Carousel3D";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// jsjjs
+// import HeroCarousel, { slides } from "@/components/hero-carousel";
 
 export default function Home() {
   // ✅ This MUST be declared before any JSX using isPlaying
   const [isPlaying, setIsPlaying] = useState(false);
+
+
+// useEffect(() => {
+//   slides.forEach(slide => new Image().src = slide.image);
+// }, []);
+
+
 
   const { data: featuredCollections, isLoading: collectionsLoading } = useQuery(
     {
@@ -62,7 +71,8 @@ export default function Home() {
               src="https://i.postimg.cc/Pf7bj1wZ/ChatGPT_Image_Jun_20,_2025,_11_18_41_PM.png"
               alt="Intro placeholder"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 rounded-3xl"
-              loading="lazy"
+              loading="eager"
+              decoding="async"
             />
           </div>
         </div>
@@ -110,6 +120,8 @@ export default function Home() {
                       src={src}
                       alt="Contemporary Rug"
                       className="w-full h-96 md:h-[28rem] lg:h-[32rem] object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                 ))}
@@ -134,6 +146,8 @@ export default function Home() {
                       src={src}
                       alt="Modern Rug"
                       className="w-full h-96 md:h-[28rem] lg:h-[32rem] object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                 ))}
@@ -192,6 +206,8 @@ export default function Home() {
                       src={src}
                       alt="Traditional Rug"
                       className="w-full h-96 md:h-[28rem] lg:h-[32rem] object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                 ))}
@@ -243,11 +259,15 @@ export default function Home() {
                   src={img.main}
                   alt={`Featured ${i + 1}`}
                   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <img
                   src={img.hover}
                   alt={`Featured Hover ${i + 1}`}
                   className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
               </Link>
             ))}
@@ -286,7 +306,8 @@ export default function Home() {
                   src="https://img.youtube.com/vi/lKfV5nuxSDY/maxresdefault.jpg"
                   alt="Carpet weaving process showing artisan craftsmanship"
                   className="w-full h-[32rem] md:h-[40rem] object-cover"
-                  loading="lazy"
+                   loading="eager"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-center justify-center">
                   <Button
@@ -353,6 +374,8 @@ export default function Home() {
                     src={item.img}
                     alt={`${item.title} image`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="font-serif text-2xl font-semibold text-foreground mb-4">
@@ -408,11 +431,15 @@ export default function Home() {
                 src="https://i.postimg.cc/13hpgPM3/ChatGPT_Image_Jun_20,_2025,_11_23_59_PM.png"
                 alt="Heritage Default"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async" 
               />
               <img
                 src="https://i.postimg.cc/13hpgPM3/ChatGPT_Image_Jun_20,_2025,_11_23_59_PM.png"
                 alt="Heritage Hover"
                 className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute bottom-6 right-6 bg-premium-gold text-primary-brown px-6 py-4 rounded-xl shadow-xl">
                 <div className="text-center">

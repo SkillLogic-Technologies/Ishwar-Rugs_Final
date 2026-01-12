@@ -67,6 +67,13 @@ const slides: CarouselSlide[] = [
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  //sjnsnxsjx
+  useEffect(() => {
+  const img = new Image();
+  img.src = slides[0].image;
+}, []);
+
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -87,12 +94,15 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative mt-20 h-screen overflow-hidden">
+    // jsxusjnks
+    // <section className="relative mt-20 h-screen overflow-hidden">
+    <section className="relative mt-20 h-screen overflow-hidden will-change-transform">
       <div className="absolute inset-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-all duration-1000 ${
+          // mnxudnxsjn
+            className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
             style={{ transform: `translateX(${(index - currentSlide) * 100}%)` }}
@@ -102,6 +112,9 @@ export default function HeroCarousel() {
               alt={slide.title}
               className="w-full h-full object-cover"
               loading={index === 0 ? "eager" : "lazy"}
+              //sshxudhnsn
+              decoding="async"
+              // fetchpriority={index === 0 ? "high" : "auto"}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 

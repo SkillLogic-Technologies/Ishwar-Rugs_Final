@@ -139,6 +139,8 @@ const AdminCollections = () => {
                 <img
                   src={collection.heroImage}
                   alt={collection.name}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-48 object-cover rounded-lg mb-3"
                 />
                 <h2 className="text-lg font-bold">{collection.name}</h2>

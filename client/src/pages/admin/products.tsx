@@ -122,6 +122,8 @@ export default function AdminProducts() {
               <img
                 src={product.images?.[0]}
                 alt={product.name}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-40 object-cover rounded"
               />
               <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
