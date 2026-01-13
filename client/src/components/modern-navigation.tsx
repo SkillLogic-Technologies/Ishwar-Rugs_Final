@@ -27,7 +27,8 @@ export default function ModernNavigation() {
             <Link href="/">
               <div className="cursor-pointer">
                 <img
-                  src="https://i.postimg.cc/fy162xqr/Chat-GPT-Image-Jul-10-2025-02-12-10-PM.png"
+                  // src="https://i.postimg.cc/fy162xqr/Chat-GPT-Image-Jul-10-2025-02-12-10-PM.png"
+                  src="/logo/Logo.png"
                   alt="Ishwar Rugs Logo"
                   className="h-20 w-auto" // larger size for clarity
                 />

@@ -8,19 +8,10 @@ import CollectionGrid from "@/components/collection-grid";
 import { Button } from "@/components/ui/button";
 import Carousel3D from "@/components/Carousel3D";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// jsjjs
-// import HeroCarousel, { slides } from "@/components/hero-carousel";
 
 export default function Home() {
   // ✅ This MUST be declared before any JSX using isPlaying
   const [isPlaying, setIsPlaying] = useState(false);
-
-
-// useEffect(() => {
-//   slides.forEach(slide => new Image().src = slide.image);
-// }, []);
-
-
 
   const { data: featuredCollections, isLoading: collectionsLoading } = useQuery(
     {
@@ -68,7 +59,8 @@ export default function Home() {
         <div className="w-full mt-20">
           <div className="w-full h-[48rem] overflow-hidden rounded-3xl">
             <img
-              src="https://i.postimg.cc/Pf7bj1wZ/ChatGPT_Image_Jun_20,_2025,_11_18_41_PM.png"
+              // src="https://i.postimg.cc/Pf7bj1wZ/ChatGPT_Image_Jun_20,_2025,_11_18_41_PM.png"
+              src="/Carpet.png"
               alt="Intro placeholder"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 rounded-3xl"
               loading="eager"
@@ -106,10 +98,10 @@ export default function Home() {
               </div>
               <div className="order-1 lg:order-2 grid grid-cols-2 gap-8">
                 {[
-                  "https://i.postimg.cc/k4Mk1fGk/Chat-GPT-Image-Jun-30-2025-10-10-58-PM.png",
-                  "https://i.postimg.cc/VLY5mcTt/Chat-GPT-Image-Jun-30-2025-10-22-23-PM.png",
-                  "https://i.postimg.cc/QNnxGWp2/Chat-GPT-Image-Jun-30-2025-10-28-44-PM.png",
-                  "https://i.postimg.cc/xTMvXYT1/Chat-GPT-Image-Jun-30-2025-10-35-12-PM.png",
+                  "/explore-our-rugs/contemporary/contemporary-01.png",
+                  "/explore-our-rugs/contemporary/contemporary-02.png",
+                  "/explore-our-rugs/contemporary/contemporary-03.png",
+                  "/explore-our-rugs/contemporary/contemporary-04.png",
                 ].map((src, i) => (
                   <Link
                     key={i}
@@ -132,10 +124,10 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="grid grid-cols-2 gap-8">
                 {[
-                  "https://i.postimg.cc/FR7YSt3R/Chat-GPT-Image-Jun-30-2025-10-43-47-PM.png",
-                  "https://i.postimg.cc/tTnpN9Ts/Chat-GPT-Image-Jun-30-2025-11-01-28-PM.png",
-                  "https://i.postimg.cc/9MmyDNFg/Chat-GPT-Image-Jun-30-2025-11-06-16-PM.png",
-                  "https://i.postimg.cc/tTbGWWLM/Chat-GPT-Image-Jun-30-2025-11-10-05-PM.png",
+                  "/explore-our-rugs/modern/modern-01.png",
+                  "/explore-our-rugs/modern/modern-02.png",
+                  "/explore-our-rugs/modern/modern-03.png",
+                  "/explore-our-rugs/modern/modern-04.png",
                 ].map((src, i) => (
                   <Link
                     key={i}
@@ -192,10 +184,10 @@ export default function Home() {
               </div>
               <div className="order-1 lg:order-2 grid grid-cols-2 gap-8">
                 {[
-                  "https://i.postimg.cc/BnhCx0R9/Chat-GPT-Image-Jun-30-2025-11-14-07-PM.png",
-                  "https://i.postimg.cc/qRm0rg5D/Chat-GPT-Image-Jun-30-2025-11-19-00-PM.png",
-                  "https://i.postimg.cc/CxNw7v4V/Chat-GPT-Image-Jun-30-2025-11-22-16-PM.png",
-                  "https://i.postimg.cc/pdSbc3h3/Chat-GPT-Image-Jun-30-2025-11-23-06-PM.png",
+                  "/explore-our-rugs/traditional/traditional-01.png",
+                  "/explore-our-rugs/traditional/traditional-02.png",
+                  "/explore-our-rugs/traditional/traditional-03.png",
+                  "/explore-our-rugs/traditional/traditional-04.png",
                 ].map((src, i) => (
                   <Link
                     key={i}
@@ -234,20 +226,20 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-screen-2xl mx-auto">
             {[
               {
-                main: "https://i.postimg.cc/J4c2yt8p/Chat-GPT-Image-Jun-30-2025-11-33-23-PM.png",
-                hover: "https://i.postimg.cc/d06B0hTG/image.png",
-              },
-              {
-                main: "https://i.postimg.cc/VkNTt1Dn/Serene-Sketching-in-Soft-Light.png",
-                hover: "https://i.postimg.cc/d3Scg10R/image.png",
-              },
-              {
-                main: "https://i.postimg.cc/xCbc47Yq/Chat-GPT-Image-Jun-30-2025-11-58-54-PM.png",
-                hover: "https://i.postimg.cc/jd6v13d8/image.png",
-              },
-              {
-                main: "https://i.postimg.cc/cH56sd9h/Chat-GPT-Image-Jun-30-2025-11-49-43-PM.png",
-                hover: "https://i.postimg.cc/cHzPxzQw/image.png",
+                  main: "/featured-collections/featured-01-main.png",
+                  hover: "/featured-collections/featured-01-hover.png",
+                },
+                {
+                  main: "/featured-collections/featured-02-main.png",
+                  hover: "/featured-collections/featured-02-hover.png",
+                },
+                {
+                  main: "/featured-collections/featured-03-main.png",
+                  hover: "/featured-collections/featured-03-hover.png",
+                },
+                {
+                  main: "/featured-collections/featured-04-main.png",
+                  hover: "/featured-collections/featured-04-hover.png",
               },
             ].map((img, i) => (
               <Link
@@ -348,25 +340,25 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
             {[
               {
-                title: "Conceptualization",
-                desc: "Our in-house studio helps shape original bespoke ideas.",
-                img: "https://i.postimg.cc/pX78qDK0/Chat-GPT-Image-Jul-1-2025-12-10-41-AM.png",
-              },
-              {
-                title: "Development",
-                desc: "Careful planning and selection of finest materials.",
-                img: "https://i.postimg.cc/cHtxXnZS/Chat-GPT-Image-Jul-1-2025-12-23-55-AM.png",
-              },
-              {
-                title: "Creation",
-                desc: "Craftsmanship in knotted, tufted, and woven forms.",
-                img: "https://i.postimg.cc/769VtfNK/Chat-GPT-Image-Jul-1-2025-12-28-28-AM.png",
-              },
-              {
-                title: "Installation",
-                desc: "Professional fitting for the perfect finish.",
-                img: "https://i.postimg.cc/vTXNn0jH/Chat-GPT-Image-Jul-1-2025-12-27-01-AM.png",
-              },
+                    title: "Conceptualization",
+                    desc: "Our in-house studio helps shape original bespoke ideas.",
+                    img: "/design-your-rug/step-01-concept.png",
+                  },
+                  {
+                    title: "Development",
+                    desc: "Careful planning and selection of finest materials.",
+                    img: "/design-your-rug/step-02-development.png",
+                  },
+                  {
+                    title: "Creation",
+                    desc: "Craftsmanship in knotted, tufted, and woven forms.",
+                    img: "/design-your-rug/step-03-creation.png",
+                  },
+                  {
+                    title: "Installation",
+                    desc: "Professional fitting for the perfect finish.",
+                    img: "/design-your-rug/step-04-installation.png",
+                  },
             ].map((item) => (
               <div key={item.title} className="text-center group">
                 <div className="relative mb-6 overflow-hidden rounded-3xl aspect-[3/4] shadow-lg">
@@ -428,14 +420,14 @@ export default function Home() {
 
             <div className="relative group overflow-hidden w-full h-full">
               <img
-                src="https://i.postimg.cc/13hpgPM3/ChatGPT_Image_Jun_20,_2025,_11_23_59_PM.png"
+                src="/heritage/heritage-main.png"
                 alt="Heritage Default"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
                 decoding="async" 
               />
               <img
-                src="https://i.postimg.cc/13hpgPM3/ChatGPT_Image_Jun_20,_2025,_11_23_59_PM.png"
+                src="/heritage/heritage-hover.png"
                 alt="Heritage Hover"
                 className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                 loading="lazy"

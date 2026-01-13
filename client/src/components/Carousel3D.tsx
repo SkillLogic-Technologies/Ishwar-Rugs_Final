@@ -14,17 +14,17 @@ import "swiper/css/pagination";
 import "@/components/styles/carousel.css"; // Make sure the file path is correct
 
 const images = [
-  "https://i.postimg.cc/CMmKx8SM/ChatGPT_Image_Jun_20,_2025,_10_42_35_PM.png",
-  "https://i.postimg.cc/mDVThxxp/ChatGPT_Image_Jun_20,_2025,_10_45_37_PM.png",
-  "https://i.postimg.cc/N06sq9dc/ChatGPT_Image_Jun_20,_2025,_10_46_55_PM.png",
-  "https://i.postimg.cc/Gt2dyMdL/ChatGPT_Image_Jun_20,_2025,_11_03_56_PM.png",
-  "https://i.postimg.cc/k47nnJHt/ChatGPT_Image_Jun_20,_2025,_11_07_33_PM.png",
-  "https://i.postimg.cc/VLY5mcTt/ChatGPT_Image_Jun_30,_2025,_10_22_23_PM.png",
-  "https://i.postimg.cc/xTMvXYT1/ChatGPT_Image_Jun_30,_2025,_10_35_12_PM.png",
-  "https://i.postimg.cc/pdSbc3h3/ChatGPT_Image_Jun_30,_2025,_11_23_06_PM.png",
-  "https://i.postimg.cc/CxNw7v4V/ChatGPT_Image_Jun_30,_2025,_11_22_16_PM.png",
-  "https://i.postimg.cc/FR7YSt3R/ChatGPT_Image_Jun_30,_2025,_10_43_47_PM.png",
-  "https://i.postimg.cc/tTnpN9Ts/ChatGPT_Image_Jun_30,_2025,_11_01_28_PM.png",
+      "/carousel-3d/slide-01.png",
+      "/carousel-3d/slide-02.png",
+      "/carousel-3d/slide-03.png",
+      "/carousel-3d/slide-04.png",
+      "/carousel-3d/slide-05.png",
+      "/carousel-3d/slide-06.png",
+      "/carousel-3d/slide-07.png",
+      "/carousel-3d/slide-08.png",
+      "/carousel-3d/slide-09.png",
+      "/carousel-3d/slide-10.png",
+      "/carousel-3d/slide-11.png",
 ];
 
 export default function Carousel360() {

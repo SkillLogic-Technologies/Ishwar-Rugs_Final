@@ -18,7 +18,8 @@ const slides: CarouselSlide[] = [
     id: 1,
     title: "Velura",
     description: "Step into softness with our signature collection.",
-    image: "https://i.postimg.cc/1Xmm1g6H/Chat-GPT-Image-Jul-10-2025-02-58-06-PM.png",
+    // image: "https://i.postimg.cc/1Xmm1g6H/Chat-GPT-Image-Jul-10-2025-02-58-06-PM.png",
+    image: "/hero-section/hero-2.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -26,7 +27,8 @@ const slides: CarouselSlide[] = [
     id: 2,
     title: "Jungle Weave",
     description: "Nature-inspired textures for modern living.",
-    image: "https://i.postimg.cc/W3Q9Y81k/Jungle-carpet.png",
+    // image: "https://i.postimg.cc/W3Q9Y81k/Jungle-carpet.png",
+    image: "/hero-section/Jungle-carpet.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -34,7 +36,8 @@ const slides: CarouselSlide[] = [
     id: 3,
     title: "Medows",
     description: "Subtle elegance in every thread.",
-    image: "https://i.postimg.cc/vTf0Jn4S/Medows-carpet.png",
+    // image: "https://i.postimg.cc/vTf0Jn4S/Medows-carpet.png",
+     image: "/hero-section/Medows-carpet.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -42,7 +45,8 @@ const slides: CarouselSlide[] = [
     id: 4,
     title: "Obscure",
     description: "A bold statement in color and form.",
-    image: "https://i.postimg.cc/y6ZpgMLX/Roxy-carpet.png",
+    // image: "https://i.postimg.cc/y6ZpgMLX/Roxy-carpet.png",
+    image: "/hero-section/Roxy-carpet.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -50,7 +54,8 @@ const slides: CarouselSlide[] = [
     id: 5,
     title: "EchoFade",
     description: "Raw beauty meets refined craftsmanship.",
-    image: "https://i.postimg.cc/MGnmkB4b/Rugged-carpet.png",
+    // image: "https://i.postimg.cc/MGnmkB4b/Rugged-carpet.png",
+    image: "/hero-section/Rugged-carpet.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -58,7 +63,8 @@ const slides: CarouselSlide[] = [
     id: 6,
     title: "Spaceship",
     description: "Explore the cosmos of comfort with our Spaceeship collection.",
-    image: "https://i.postimg.cc/9Mjc7v64/Chat-GPT-Image-Jul-9-2025-06-29-21-PM.png",
+    // image: "https://i.postimg.cc/9Mjc7v64/Chat-GPT-Image-Jul-9-2025-06-29-21-PM.png",
+    image: "/hero-section/hero-1.png",
     link: "/collections",
     buttonText: "EXPLORE COLLECTION",
   },
@@ -67,7 +73,7 @@ const slides: CarouselSlide[] = [
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  //sjnsnxsjx
+  // Adil-dev
   useEffect(() => {
   const img = new Image();
   img.src = slides[0].image;
@@ -94,14 +100,14 @@ export default function HeroCarousel() {
   };
 
   return (
-    // jsxusjnks
+    // Adil-dev
     // <section className="relative mt-20 h-screen overflow-hidden">
     <section className="relative mt-20 h-screen overflow-hidden will-change-transform">
       <div className="absolute inset-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-          // mnxudnxsjn
+          // Adil-dev
             className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
@@ -112,7 +118,7 @@ export default function HeroCarousel() {
               alt={slide.title}
               className="w-full h-full object-cover"
               loading={index === 0 ? "eager" : "lazy"}
-              //sshxudhnsn
+              //Adil-dev
               decoding="async"
               // fetchpriority={index === 0 ? "high" : "auto"}
             />
