@@ -1,4 +1,6 @@
 import Product from "../models/Product.js";
+import Category from "../models/Category.js";
+import Collection from "../models/Collection.js";
 import fs from "fs"
 
 // create product...
@@ -13,11 +15,20 @@ async function createProduct(req, res) {
         }
 
         const data = {...req.body}
+
+        const categoryDoc = await Category.findOne({ slug: category }) || await Category.findById(category);
+
+        if (!categoryDoc) {
+            return res.status(404).json({ success: false, message: "Invalid category" });
+        }
+
+        data.category = categoryDoc._id;
+
         if (req.files?.thumbnail?.length > 0) {
-            data.thumbnail = req.files.thumbnail[0].path;
+            data.thumbnail = req.files.thumbnail[0].path.replace(/\\/g, "/");;
         }
         if (req.files?.images?.length > 0) {
-            data.images = req.files.images.map(file => file.path);
+            data.images = req.files.images.map(file => file.path.replace(/\\/g, "/"));
         }
 
         const product = await Product.create(data)
@@ -64,10 +75,10 @@ async function getProducts(req, res) {
     }  
 }
 
-// get product by id..
+// get product by slug..
 async function getProductBySlug(req, res){
     try {
-        const product = await Product.findOne({slug: req.params.slug});
+        const product = await Product.findOne({slug: req.params.slug}).populate("category", "name");
         if(!product){
             return res.status(404).json({ success: false, message: "Product not found" })
         }
@@ -75,6 +86,44 @@ async function getProductBySlug(req, res){
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
+}
+
+// get Products By Category Slug
+async function getProductsByCategorySlug(req,res){
+    try {
+        const { slug } = req.params;
+
+        const category = await Category.findOne({ slug });
+        if (!category) {
+            return res.status(404).json({ success: false, message: "Category not found" });
+        }
+
+        const products = await Product.find({ category: category._id });
+
+        return res.status(200).json({ success: true, category: category.name, data: products});
+
+  } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+// get Products By Collection Slug
+async function getProductsByCollectionSlug(req,res){
+    try {
+        const { slug } = req.params;
+
+        const collection = await Collection.findOne({ slug });
+        if (!collection) {
+            return res.status(404).json({ success: false, message: "Collection not found" });
+        }
+
+        const products = await Product.find({ collection: collection._id });
+
+        return res.status(200).json({ success: true, collection: collection.name, data: products});
+
+  } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+  }
 }
 
 // update product
@@ -88,16 +137,26 @@ async function updateProduct(req, res) {
         }
 
         const updatedData = { ...req.body };
-        if (req.files?.thumbnail?.length > 0) {
-            if (product.thumbnail && fs.existsSync(product.thumbnail)) {
-                fs.unlinkSync(product.thumbnail);
-            }
-            updatedData.thumbnail = req.files.thumbnail[0].path;
-        }
 
+        if (req.files?.thumbnail?.length > 0) {
+            if (product.thumbnail) {
+                const oldThumbnail = product.thumbnail.replace(/\\/g, "/");
+                if (fs.existsSync(oldThumbnail)) {
+                    fs.unlinkSync(oldThumbnail);
+                }
+            }
+            updatedData.thumbnail = req.files.thumbnail[0].path.replace(/\\/g, "/");
+        }
         if (req.files?.images?.length > 0) {
-            product.images?.forEach(img => fs.existsSync(img) && fs.unlinkSync(img));
-            updatedData.images = req.files.images.map(file => file.path);
+            if (product.images?.length) {
+                product.images.forEach(img => {
+                    const oldImg = img.replace(/\\/g, "/");
+                    if (fs.existsSync(oldImg)) {
+                        fs.unlinkSync(oldImg);
+                    }
+                });
+            }
+            updatedData.images = req.files.images.map(file => file.path.replace(/\\/g, "/"));
         }
 
         const updatedProduct = await Product.findByIdAndUpdate( id, updatedData, { new: true });
@@ -140,9 +199,14 @@ async function userReview(req, res){
         }
 
         const review = {
-            user: req.user._id,
             comment,
-            rating: Number(rating)
+            rating: Number(rating),
+        };
+
+        if (req.identity.type === "user") {
+            review.user = req.identity.id;
+        } else {
+            review.guestId = req.identity.id;
         }
 
         product.reviews.push(review);
@@ -156,4 +220,4 @@ async function userReview(req, res){
     }
 }
 
-export { createProduct, getProducts, getProductBySlug, updateProduct, deleteProduct, userReview }
+export { createProduct, getProducts, getProductBySlug, getProductsByCategorySlug, getProductsByCollectionSlug, updateProduct, deleteProduct, userReview }

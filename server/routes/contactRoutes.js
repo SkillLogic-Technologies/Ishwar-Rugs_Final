@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.route("/")
 .get(isAuth, isAdmin, getContacts)
-.post(isAuth, contactUs)
+.post(contactUs)
 
 router.route("/:id")
 .get(isAuth, isAdmin, getContactById)

@@ -6,7 +6,9 @@ const storage = multer.diskStorage({
     if (req.baseUrl.includes("category")) {
       folder = "uploads/category/";
     } else if (req.baseUrl.includes("product")) {
-      folder = "uploads/product/";
+        folder = "uploads/product/";
+    } else if (req.baseUrl.includes("collection")) {
+        folder = "uploads/collection/";
     }
     cb(null, folder);
   },

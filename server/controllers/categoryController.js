@@ -16,8 +16,13 @@ async function createCategory(req,res) {
             return res.status(400).json({ success: false, message: "Category already exists" });
         }
 
+        let imagePath = null;
+        if (req.file) {
+            imagePath = req.file.path.replace(/\\/g, "/");
+        }
+
         const category = await Category.create({ 
-            name, description, image: req.file ? req.file.path : null, isActive 
+            name, description, image: imagePath, isActive 
         });
         res.status(201).json({ success: true, message: "Category created successfully", data: category });
     } catch (error) {
@@ -35,7 +40,7 @@ async function getCategories(req, res) {
     }
 }
 
-// Get category by id..
+// Get category by slug..
 async function getCategoryBySlug (req, res) {
     try {
         const category = await Category.findOne({slug: req.params.slug});
@@ -59,15 +64,21 @@ async function updateCategory(req, res) {
             return res.status(404).json({ success: false, message: "Category not found" });
         }
 
-        if (category.image && fs.existsSync(category.image)) {
-            fs.unlinkSync(category.image);
+        if (req.file && category.image) {
+            const oldImagePath = category.image.replace(/\\/g, "/");
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
         }
+        let newImagePath = category.image;
 
-        const newImage = req.file ? req.file.path : category.image;
+        if (req.file) {
+            newImagePath = req.file.path.replace(/\\/g, "/");
+        }
 
         const updatedData = {
             ...req.body,
-            image: newImage
+            image: newImagePath
         };
 
         const updatedCategory = await Category.findByIdAndUpdate( id, updatedData, { new: true });

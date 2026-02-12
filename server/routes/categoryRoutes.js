@@ -12,6 +12,7 @@ router.route("/")
 
 router.route("/:slug").get(getCategoryBySlug)
 
+
 router.route("/:id")
 .put(isAuth, isAdmin, upload.single("image"), updateCategory)
 .delete(isAuth, isAdmin, deleteCategory)

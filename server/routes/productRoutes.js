@@ -1,8 +1,10 @@
 import express from "express"
-import { createProduct, getProducts, getProductBySlug, updateProduct, deleteProduct, userReview } from '../controllers/productController.js'
+import { createProduct, getProducts, getProductBySlug, getProductsByCategorySlug, getProductsByCollectionSlug, updateProduct, deleteProduct, userReview } from '../controllers/productController.js'
 import { upload } from "../middlewares/upload.js";
 import { isAuth } from "../middlewares/isAuth.middleware.js"
 import { isAdmin } from "../middlewares/isAdmin.middleware.js"
+import { optionalAuth } from "../middlewares/optionalAuth.middleware.js"
+import { attachIdentity } from "../middlewares/attachIdentity.middleware.js";
 
 const router = express.Router()
 
@@ -14,6 +16,8 @@ router.route("/")
   ]), createProduct)
 
 router.route("/:slug").get(getProductBySlug)
+router.get("/category/:slug", getProductsByCategorySlug);
+router.get("/collection/:slug", getProductsByCollectionSlug);
 
 router.route("/:id")
 .put(isAuth, isAdmin, upload.fields([
@@ -24,7 +28,7 @@ router.route("/:id")
 
 
 router.route("/:id/review")
-.post(isAuth, userReview)
+.post(optionalAuth, attachIdentity, userReview)
 
 export default router;
 

@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema(
         slug : { type: String, unique: true, trim: true },
         description: { type: String },
         category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+        collection: { type: mongoose.Schema.Types.ObjectId, ref: "Collection", default: null },
         price: { type: Number },
         mrp: { type: Number, required: true },
         discountPercent: { type: Number, default: 0 },
@@ -19,8 +20,8 @@ const productSchema = new mongoose.Schema(
         style: { type: String },    
         pileHeight: { type: String }, 
 
-        length: { type: Number },     // in m
-        width: { type: Number },      // in m
+        length: { type: Number },     // in ft
+        width: { type: Number },      // in ft
         weight: { type: Number },     // in kg
         shape: { type: String }, 
 
@@ -40,7 +41,8 @@ const productSchema = new mongoose.Schema(
         rating: { type: Number, default: 0 },
         reviews: [
         {
-            user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+            guestId: String,
             comment: String,
             rating: Number,
             date: { type: Date, default: Date.now }

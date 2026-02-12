@@ -101,7 +101,75 @@ export const verifyLoginOtp = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        // guest user
+        const guestId = req.cookies?.guestId;
+
+        // for product review
+        if (guestId) {
+        await Product.updateMany(
+            { "reviews.guestId": guestId },
+            {
+                $set: { "reviews.$[].user": user._id },
+                $unset: { "reviews.$[].guestId": "" }
+            }
+        );
+        }
+
+        // for wishlist 
+        if (guestId) {
+            const guestWishlist = await Wishlist.findOne({ guestId });
+
+            if (guestWishlist) {
+                let userWishlist = await Wishlist.findOne({ user: user._id });
+
+                if (userWishlist) {
+                    const mergedProducts = [...new Set([
+                        ...userWishlist.products.map(p => p.toString()),
+                        ...guestWishlist.products.map(p => p.toString()),
+                    ]),];
+                    userWishlist.products = mergedProducts;
+                    await userWishlist.save();
+                    await Wishlist.deleteOne({ guestId });
+                } else {
+                    guestWishlist.user = user._id;
+                    guestWishlist.guestId = null;
+                    await guestWishlist.save();
+                }
+            }
+        }
+
+        //for cart
+        if (guestId) {
+            const guestCart = await Cart.findOne({ guestId });
+            if (guestCart) {
+                const userCart = await Cart.findOne({ user: user._id });
+                if (!userCart) {
+                    guestCart.user = user._id;
+                    guestCart.guestId = null;
+                    await guestCart.save();
+                }
+                else {
+                    guestCart.items.forEach((gItem) => {
+                    const index = userCart.items.findIndex( (uItem) => uItem.product.toString() === gItem.product.toString());
+                    if (index > -1) {
+                        userCart.items[index].quantity += gItem.quantity;
+                        userCart.items[index].total = userCart.items[index].quantity * userCart.items[index].price;
+                    } else {
+                        userCart.items.push(gItem);
+                    }
+                    });
+                    userCart.cartTotal = userCart.items.reduce(
+                        (acc, item) => acc + item.total,
+                        0
+                    );
+                    await userCart.save();
+                    await Cart.deleteOne({ guestId });
+                }
+            }
+        }
+        
         await haveOtp.deleteOne();
+
         
         return res.status(200).json({
         success: true,
@@ -109,6 +177,9 @@ export const verifyLoginOtp = async (req, res) => {
         user,
         token
         });
+
+        return res.status(200).json({ success: true, message: "User loggedIn", user, token });
+
     } catch (error) {
         res.status(500).json({Success:false, message:"OTP verification failed"})
     }
