@@ -35,9 +35,14 @@ export default function AdminProducts() {
   const fetchProducts = async () => {
     try {
       const res = await axios.get("/api/products");
-      setProducts(res.data);
+
+      const productsArray =
+        res.data?.products || res.data?.data || res.data?.data?.products || [];
+
+      setProducts(Array.isArray(productsArray) ? productsArray : []);
     } catch (err) {
       toast({ title: "Error", description: "Failed to fetch products" });
+      setProducts([]);
     }
   };
 
@@ -70,7 +75,8 @@ export default function AdminProducts() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
     try {
       await axios.delete(`/api/products/${id}`);
       toast({ title: "Product deleted successfully" });
@@ -134,7 +140,9 @@ export default function AdminProducts() {
                 ₹ {product.price.toFixed(2)}
               </p>
               <div className="flex justify-between items-center mt-2 text-xs">
-                <span className="text-muted-foreground">Slug: {product.slug}</span>
+                <span className="text-muted-foreground">
+                  Slug: {product.slug}
+                </span>
                 <span
                   className={`px-2 py-0.5 rounded text-white text-xs ${
                     product.featured ? "bg-green-600" : "bg-gray-400"
@@ -174,7 +182,9 @@ export default function AdminProducts() {
                   placeholder="Name"
                   className="w-full border px-3 py-2 rounded"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   required
                 />
                 <input
@@ -182,14 +192,18 @@ export default function AdminProducts() {
                   placeholder="Slug"
                   className="w-full border px-3 py-2 rounded"
                   value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, slug: e.target.value })
+                  }
                   required
                 />
                 <textarea
                   placeholder="Description"
                   className="w-full border px-3 py-2 rounded"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                 />
                 <input
                   type="number"
@@ -197,7 +211,10 @@ export default function AdminProducts() {
                   className="w-full border px-3 py-2 rounded"
                   value={formData.price}
                   onChange={(e) =>
-                    setFormData({ ...formData, price: parseFloat(e.target.value) })
+                    setFormData({
+                      ...formData,
+                      price: parseFloat(e.target.value),
+                    })
                   }
                   required
                 />
@@ -228,7 +245,7 @@ export default function AdminProducts() {
                       setShowForm(false);
                       setEditingProductId(null);
                     }}
-                    className="px-4 py-2 border rounded"
+                    className="px-4 text-black py-2 border rounded"
                   >
                     Cancel
                   </button>

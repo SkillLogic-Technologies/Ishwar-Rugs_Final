@@ -2,9 +2,10 @@ import mongoose from "mongoose"
 
 const wishlistSchema = new mongoose.Schema(
     {
-        user : { type : mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique:true},
+        user : { type : mongoose.Schema.Types.ObjectId, ref: "User",  default: null },
+        guestId: { type: String, default: null },
         products :[
-            { type: mongoose.Schema.Types.ObjectId, ref: "Product"}
+            { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
         ]
     },{timestamps: true}
 )

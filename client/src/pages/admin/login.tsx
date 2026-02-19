@@ -1,36 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 
-// ✅ Real credentials
-const ADMIN_EMAIL = "Satyam.du.in@gmail.com";
-const ADMIN_PASSWORD = "Satyam@2025";
-
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token === "authenticated") {
-      setLocation("/admin/dashboard");
-    }
-  }, []);
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      localStorage.setItem("token", "authenticated");
-      toast({ title: "Login successful!" });
-      setLocation("/admin/dashboard");
-    } else {
+    try {
+      const res = await fetch("http://localhost:3000/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 🔥 VERY IMPORTANT (cookie ke liye)
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast({ title: "Login Successful" });
+        window.location.href = "/admin/dashboard";
+      } else {
+        toast({
+          title: data.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Invalid credentials",
+        title: "Something went wrong",
         variant: "destructive",
       });
     }

@@ -10,7 +10,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!username || !email) {
+    if (!email) {
       setSuccess(false);
       setMessage("Please fill all fields");
       return;
@@ -22,7 +22,7 @@ export default function Login() {
       const res = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email }),
+        body: JSON.stringify({email }),
       });
 
       const data = await res.json();
@@ -34,7 +34,7 @@ export default function Login() {
         // Save user temporarily for verify page
         sessionStorage.setItem(
           "otpUser",
-          JSON.stringify({ username, email })
+          JSON.stringify({ email })
         );
 
         setTimeout(() => {
@@ -59,13 +59,13 @@ return (
         Login
       </h2>
 
-                <input
+                {/* <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full mb-4 px-4 py-3 rounded-lg bg-white/10 border border-white/20 outline-none"
-            />
+            /> */}
 
         <input
           type="email"

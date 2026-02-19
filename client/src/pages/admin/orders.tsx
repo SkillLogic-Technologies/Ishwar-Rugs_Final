@@ -21,12 +21,17 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("/api/orders")
+    axios
+      .get("/api/orders")
       .then((res) => {
-        setOrders(res.data);
+        const ordersArray =
+          res.data?.orders || res.data?.data || res.data?.data?.orders || [];
+
+        setOrders(Array.isArray(ordersArray) ? ordersArray : []);
       })
       .catch((err) => {
         console.error("Failed to fetch orders:", err);
+        setOrders([]);
       })
       .finally(() => {
         setLoading(false);
@@ -59,7 +64,9 @@ const AdminOrders = () => {
                     <td className="px-4 py-2">{order.id}</td>
                     <td className="px-4 py-2">
                       <div>{order.customer.name}</div>
-                      <div className="text-sm text-muted-foreground">{order.customer.email}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {order.customer.email}
+                      </div>
                     </td>
                     <td className="px-4 py-2">{order.product.name}</td>
                     <td className="px-4 py-2">{order.quantity}</td>

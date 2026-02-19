@@ -7,7 +7,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const loginUser = async (req, res) => {
     try {
-        const email = req.body.email?.toLowerCase().trim();
+        const email= req.body.email?.toLowerCase().trim();
 
          if (!email || !emailRegex.test(email)) {
           return res.status(400).json({
@@ -90,18 +90,87 @@ export const verifyLoginOtp = async (req, res) => {
         }
 
         const token = jwt.sign(
-        { userId: user._id },
+        { userId: user._id,  role: user.role },
         process.env.SECRET_KEY,
         { expiresIn: "3d" }
         );
-            res.cookie("token", token, {
+            res.cookie("userToken", token, {
             httpOnly: true,   
             secure: false,    
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        // guest user
+        const guestId = req.cookies?.guestId;
+
+        // for product review
+        if (guestId) {
+        await Product.updateMany(
+            { "reviews.guestId": guestId },
+            {
+                $set: { "reviews.$[].user": user._id },
+                $unset: { "reviews.$[].guestId": "" }
+            }
+        );
+        }
+
+        // for wishlist 
+        if (guestId) {
+            const guestWishlist = await Wishlist.findOne({ guestId });
+
+            if (guestWishlist) {
+                let userWishlist = await Wishlist.findOne({ user: user._id });
+
+                if (userWishlist) {
+                    const mergedProducts = [...new Set([
+                        ...userWishlist.products.map(p => p.toString()),
+                        ...guestWishlist.products.map(p => p.toString()),
+                    ]),];
+                    userWishlist.products = mergedProducts;
+                    await userWishlist.save();
+                    await Wishlist.deleteOne({ guestId });
+                } else {
+                    guestWishlist.user = user._id;
+                    guestWishlist.guestId = null;
+                    await guestWishlist.save();
+                }
+            }
+        }
+
+        //for cart
+        if (guestId) {
+            const guestCart = await Cart.findOne({ guestId });
+            if (guestCart) {
+                const userCart = await Cart.findOne({ user: user._id });
+                if (!userCart) {
+                    guestCart.user = user._id;
+                    guestCart.guestId = null;
+                    await guestCart.save();
+                }
+                else {
+                    guestCart.items.forEach((gItem) => {
+                    const index = userCart.items.findIndex( (uItem) => uItem.product.toString() === gItem.product.toString());
+                    if (index > -1) {
+                        userCart.items[index].quantity += gItem.quantity;
+                        userCart.items[index].total = userCart.items[index].quantity * userCart.items[index].price;
+                    } else {
+                        userCart.items.push(gItem);
+                    }
+                    });
+                    userCart.cartTotal = userCart.items.reduce(
+                        (acc, item) => acc + item.total,
+                        0
+                    );
+                    await userCart.save();
+                    await Cart.deleteOne({ guestId });
+                }
+            }
+        }
+        
         await haveOtp.deleteOne();
+
+
         
         return res.status(200).json({
         success: true,
@@ -109,14 +178,36 @@ export const verifyLoginOtp = async (req, res) => {
         user,
         token
         });
+
+        return res.status(200).json({ success: true, message: "User loggedIn", user, token });
+
     } catch (error) {
         res.status(500).json({Success:false, message:"OTP verification failed"})
     }
 }
 export const myProfile = async (req, res) => {
+  try {
     const user = await User.findById(req.user._id);
-    res.json(user)
-}
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        _id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+        role: req.user.role,
+      },
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch profile"
+    });
+  }
+};
+
+
 export const logoutUser = (req, res) => {
   try {
     res.clearCookie("token", {

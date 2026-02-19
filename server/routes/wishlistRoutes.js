@@ -1,11 +1,11 @@
 import express from "express"
-import { addToWishlist, getWishlist, removeFromWishlist } from "../controllers/wishlistController.js"
-import { isAuth } from "../middlewares/isAuth.middleware.js"
+import { toggleWishlist, getWishlist } from "../controllers/wishlistController.js"
+import { attachIdentity } from "../middlewares/attachIdentity.middleware.js"
+import { optionalAuth } from "../middlewares/optionalAuth.middleware.js";
 
 const router = express.Router()
 
-router.get("/", isAuth, getWishlist)
-router.post("/:productId", isAuth, addToWishlist);
-router.delete("/:productId", isAuth, removeFromWishlist);
+router.get("/", optionalAuth, attachIdentity, getWishlist)
+router.post("/:productId", optionalAuth, attachIdentity, toggleWishlist);
 
 export default router;

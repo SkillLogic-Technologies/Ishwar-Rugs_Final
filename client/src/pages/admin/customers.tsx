@@ -18,12 +18,20 @@ const AdminCustomers = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("/api/customers")
+    axios
+      .get("/api/customers")
       .then((res) => {
-        setCustomers(res.data);
+        const customersArray =
+          res.data?.customers ||
+          res.data?.data ||
+          res.data?.data?.customers ||
+          [];
+
+        setCustomers(Array.isArray(customersArray) ? customersArray : []);
       })
       .catch((err) => {
         console.error("Failed to fetch customers:", err);
+        setCustomers([]);
       })
       .finally(() => {
         setLoading(false);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Sun, Moon, Search, ShoppingBag,User} from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,54 @@ export default function ModernNavigation() {
 
   const [, navigate] = useLocation();
   const token = localStorage.getItem("token");
-const isVerifyPage = location === "/verify";
+  const isVerifyPage = location === "/verify";
 
 
+  type VerifiedUser = {
+  username: string;
+  email?: string;
+};
+
+const [verifiedUser, setVerifiedUser] = useState<VerifiedUser | null>(null);
+useEffect(() => {
+  const loadUser = () => {
+    const user = sessionStorage.getItem("verifiedUser");
+    setVerifiedUser(user ? JSON.parse(user) : null);
+  };
+
+  // page load pe bhi load karo (IMPORTANT)
+  loadUser();
+
+  // verify ke turant baad
+  window.addEventListener("userVerified", loadUser);
+
+  return () => {
+    window.removeEventListener("userVerified", loadUser);
+  };
+}, []);
+
+
+
+const handleLogout = async () => {
+  try {
+    await fetch("http://127.0.0.1:5000/api/users/logout", {
+      method: "POST",
+      credentials: "include", // ⭐ VERY IMPORTANT
+    });
+  } catch (err) {
+    console.error("Logout error", err);
+  }
+
+  // ✅ frontend clean
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("verifiedUser");
+  setVerifiedUser(null);
+
+  // ✅ redirect
+  navigate("/");
+};
+
+  
   return (
     <nav className="fixed w-full top-0 z-50 glass-effect border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -191,37 +236,44 @@ const isVerifyPage = location === "/verify";
                           hover:bg-black/5 dark:hover:bg-white/10 
                           transition-all duration-300 relative"
               >
-                <User className="h-5 w-5" />
+                      {verifiedUser?.username ? (
+                <div className="h-8 w-8 rounded-full bg-yellow-500 text-black flex items-center justify-center text-sm font-bold">
+                  {verifiedUser.username.charAt(0).toUpperCase()}
+                </div>
+              ) : (
+                <User className="h-5 w-5" /> 
+              )}
+
+
               </Button>
 
               {/* Dropdown */}  
            <div
-  className="absolute right-0 mt-3 w-44 rounded-xl
-    bg-white dark:bg-[#1c1917]
-    border border-gray-200 dark:border-white/10
-    shadow-xl
-    opacity-0 invisible 
-    group-hover:opacity-100 group-hover:visible
-    transition-all duration-200 z-50"
->
-  {/* 🟡 VERIFY PAGE → Verify + Logout */}
-  {isVerifyPage && (
-    <>
-      <button
-        onClick={() => navigate("/verify")}
-        className="block w-full text-left px-5 py-3 text-sm 
-          text-gray-800 dark:text-white
-          hover:bg-gray-100 dark:hover:bg-white/5 transition"
-      >
-        Verify
-      </button>
+          className="absolute right-0 mt-3 w-44 rounded-xl
+            bg-white dark:bg-[#1c1917]
+            border border-gray-200 dark:border-white/10
+            shadow-xl
+            opacity-0 invisible 
+            group-hover:opacity-100 group-hover:visible
+            transition-all duration-200 z-50"
+        >
+          {/* 🟡 VERIFY PAGE → Verify + Logout */}
+          {isVerifyPage && (
+            <>
+              <button
+                onClick={() => navigate("/verify")}
+                className="block w-full text-left px-5 py-3 text-sm 
+                  text-gray-800 dark:text-white
+                  hover:bg-gray-100 dark:hover:bg-white/5 transition"
+              >
+                Verify
+              </button>
 
       <div className="border-t border-gray-200 dark:border-white/10" />
 
       <button
         onClick={() => {
-          localStorage.removeItem("token");
-          window.location.reload();
+          handleLogout();
         }}
         className="w-full text-left px-5 py-3 text-sm 
           text-gray-800 dark:text-white
@@ -236,8 +288,7 @@ const isVerifyPage = location === "/verify";
   {!isVerifyPage && token && (
     <button
       onClick={() => {
-        localStorage.removeItem("token");
-        window.location.reload();
+       handleLogout()
       }}
       className="w-full text-left px-5 py-3 text-sm 
         text-gray-800 dark:text-white
@@ -263,8 +314,7 @@ const isVerifyPage = location === "/verify";
 
       <button
         onClick={() => {
-          localStorage.removeItem("token");
-          window.location.reload();
+          handleLogout();
         }}
         className="w-full text-left px-5 py-3 text-sm 
           text-gray-800 dark:text-white
@@ -278,7 +328,6 @@ const isVerifyPage = location === "/verify";
 
 
                       </div>
-
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, ChevronDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { User, BadgeCheck } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,

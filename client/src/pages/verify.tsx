@@ -20,12 +20,18 @@ export default function Verify() {
       return;
     }
 
-    const parsed = JSON.parse(storedUser);
-    setUsername(parsed.username);
-    setEmail(parsed.email);
+   const parsed = JSON.parse(storedUser);
+      setEmail(parsed.email);
   }, [location]);
 
   const handleVerify = async () => {
+
+    if (!username) {
+    setSuccess(false);
+    setMessage("Please enter username");
+    return;
+  }
+  
     if (!otp) {
       setSuccess(false);
       setMessage("Please enter OTP");
@@ -53,6 +59,13 @@ export default function Verify() {
 
         // ✅ Save token
         localStorage.setItem("token", data.token);
+
+
+          // ⭐⭐⭐ USER SAVE (VERY IMPORTANT) ⭐⭐⭐
+        sessionStorage.setItem("verifiedUser", JSON.stringify(data.user));
+
+        // ⭐⭐⭐ NAVBAR KO SIGNAL ⭐⭐⭐
+        window.dispatchEvent(new Event("userVerified"));
 
         // ✅ Clear temp data
         sessionStorage.removeItem("otpUser");
@@ -93,12 +106,13 @@ export default function Verify() {
           </div>
         )}
 
-        <input
-          type="text"
-          value={username}
-          readOnly
-          className="w-full mb-5 px-4 py-3 rounded-lg bg-black/30 border border-gray-600 text-gray-400 outline-none"
-        />
+       <input
+  type="text"
+  placeholder="Enter Username"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  className="w-full mb-5 px-4 py-3 rounded-lg bg-black/40 border border-gray-600 focus:border-yellow-500 outline-none"
+/>
 
         <input
           type="email"

@@ -40,9 +40,13 @@ const AdminCollections = () => {
     setLoading(true);
     try {
       const res = await axios.get("/api/collections");
-      setCollections(res.data);
+
+      const collectionsArray = res.data?.collections || res.data?.data || [];
+
+      setCollections(collectionsArray);
     } catch (err) {
       console.error("Error fetching collections:", err);
+      setCollections([]);
     } finally {
       setLoading(false);
     }
@@ -267,7 +271,7 @@ const AdminCollections = () => {
                       setShowForm(false);
                       setEditingId(null);
                     }}
-                    className="px-4 py-2 border rounded"
+                    className="px-4 py-2 border rounded text-black"
                   >
                     Cancel
                   </button>

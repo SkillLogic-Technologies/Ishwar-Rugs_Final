@@ -75,7 +75,7 @@ async function getProducts(req, res) {
     }  
 }
 
-// get product by id..
+// get product by slug..
 async function getProductBySlug(req, res){
     try {
         const product = await Product.findOne({slug: req.params.slug}).populate("category", "name");
@@ -203,12 +203,10 @@ async function userReview(req, res){
             rating: Number(rating),
         };
 
-        if (req.user) {
-            // logged-in user
-            review.user = req.user._id;
+        if (req.identity.type === "user") {
+            review.user = req.identity.id;
         } else {
-            // guest user
-            review.guestId = req.guestId;
+            review.guestId = req.identity.id;
         }
 
         product.reviews.push(review);

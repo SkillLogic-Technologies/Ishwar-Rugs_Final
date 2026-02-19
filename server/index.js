@@ -6,12 +6,14 @@ import connectDB from "./config/db.js";
 import categoryRoutes from './routes/categoryRoutes.js';
 import collectionRoutes from './routes/collectionRoutes.js';
 import productRoutes from './routes/productRoutes.js'
-import userRoute from './routes/User.route.js';
+import userRoutes from './routes/User.route.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import adminRoutes from "./routes/Admin.route.js";
 import path from "path";
 // import { attachGuestId } from "./middlewares/guestId.middleware.js";
+
 
 
 const app = express();
@@ -23,13 +25,16 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+
 app.use(express.json());
 app.use(cookieParser());
 // app.use(attachGuestId);
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api/users', userRoute);
+app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/category', categoryRoutes)
 app.use('/api/collection', collectionRoutes)
 app.use('/api/product', productRoutes)

@@ -14,10 +14,28 @@ const AdminDashboard = () => {
 
   // ✅ Protect route if not logged in
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token !== "authenticated") {
-      setLocation("/admin/login");
-    }
+    const checkAdmin = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/admin/profile", {
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          setLocation("/admin/login");
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!data.success) {
+          setLocation("/admin/login");
+        }
+      } catch (error) {
+        setLocation("/admin/login");
+      }
+    };
+
+    checkAdmin();
   }, []);
 
   return (
