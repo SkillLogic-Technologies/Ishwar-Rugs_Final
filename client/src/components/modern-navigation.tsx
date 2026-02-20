@@ -309,19 +309,6 @@ const handleLogout = async () => {
       >
         Login
       </button>
-
-      <div className="border-t border-gray-200 dark:border-white/10" />
-
-      <button
-        onClick={() => {
-          handleLogout();
-        }}
-        className="w-full text-left px-5 py-3 text-sm 
-          text-gray-800 dark:text-white
-          hover:bg-gray-100 dark:hover:bg-white/5 transition"
-      >
-        Logout
-      </button>
     </>
   )}
 </div>
