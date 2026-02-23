@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRoute } from "wouter";
+import toast from "react-hot-toast";
 
 
 export default function AddProductPage() {
@@ -17,6 +19,8 @@ export default function AddProductPage() {
   const [collectionId, setCollectionId] = useState("");
   const [productId, setProductId] = useState("");
   const [match, params] = useRoute("/admin/edit-products/:slug");
+
+  const navigate = useNavigate()
 
 
   const [form, setForm] = useState({
@@ -71,12 +75,12 @@ export default function AddProductPage() {
   const handleSubmit = async () => {
     try {
       if (!match && !thumbnail) {
-        alert("Thumbnail required");
+        toast.error("Thumbnail required");
         return;
       }
 
       if (images.length < 3) {
-        alert("Minimum 3 images required");
+        toast.error("Minimum 3 images required");
         return;
       }
       const formData = new FormData();
@@ -97,49 +101,20 @@ export default function AddProductPage() {
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
+        toast.success("Product updated successfully ✅")
       } else {
         await axios.post(
           "http://localhost:5000/api/product",
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
+        toast.success("Product added successfully ✅")
       }
-
-      alert("Product Added ✅");
-      setForm({
-        title: "",
-        slug: "",
-        description: "",
-        sku: "",
-        price: "",
-        mrp: "",
-        discountPercent: "",
-        stock: "",
-        material: "",
-        weaveType: "",
-        pattern: "",
-        style: "",
-        pileHeight: "",
-        length: "",
-        width: "",
-        weight: "",
-        shape: "",
-        color: "",
-        secondaryColor: "",
-        originCountry: "",
-        manufacturer: "Ishwar Rugs",
-        careInstructions: "",
-        tags: "",
-        isFeatured: false,
-      });
-
-      setCategoryId("");
-      setCollectionId("");
-      setThumbnail(null);
-      setImages([]);
+      navigate('/admin/products')
 
     } catch (error) {
       console.log(error);
+      toast.error("Error while adding product ❌")
     }
   };
 
@@ -152,31 +127,31 @@ export default function AddProductPage() {
       const product = res.data.data;
 
       setForm({
-  title: product.title || "",
-  slug: product.slug || "",
-  description: product.description || "",
-  sku: product.sku || "",
-  price: product.price || "",
-  mrp: product.mrp || "",
-  discountPercent: product.discountPercent || "",
-  stock: product.stock || "",
-  material: product.material || "",
-  weaveType: product.weaveType || "",
-  pattern: product.pattern || "",
-  style: product.style || "",
-  pileHeight: product.pileHeight || "",
-  length: product.length || "",
-  width: product.width || "",
-  weight: product.weight || "",
-  shape: product.shape || "",
-  color: product.color || "",
-  secondaryColor: product.secondaryColor || "",
-  originCountry: product.originCountry || "",
-  manufacturer: product.manufacturer || "Ishwar Rugs",
-  careInstructions: product.careInstructions || "",
-  tags: product.tags || "",
-  isFeatured: product.isFeatured || false,
-});
+        title: product.title || "",
+        slug: product.slug || "",
+        description: product.description || "",
+        sku: product.sku || "",
+        price: product.price || "",
+        mrp: product.mrp || "",
+        discountPercent: product.discountPercent || "",
+        stock: product.stock || "",
+        material: product.material || "",
+        weaveType: product.weaveType || "",
+        pattern: product.pattern || "",
+        style: product.style || "",
+        pileHeight: product.pileHeight || "",
+        length: product.length || "",
+        width: product.width || "",
+        weight: product.weight || "",
+        shape: product.shape || "",
+        color: product.color || "",
+        secondaryColor: product.secondaryColor || "",
+        originCountry: product.originCountry || "",
+        manufacturer: product.manufacturer || "Ishwar Rugs",
+        careInstructions: product.careInstructions || "",
+        tags: product.tags || "",
+        isFeatured: product.isFeatured || false,
+      });
 
       setCategoryId(product.category?._id || "");
       setCollectionId(product.collection?._id || "");
@@ -198,22 +173,22 @@ export default function AddProductPage() {
   }, [match, params?.slug]);
 
   return (
-    <div className="max-w-6xl mx-auto mt-20">
-      <h1 className="text-2xl text-center font-semibold mb-6 text-warm-gold">
+    <div className="max-w-6xl mx-auto mt-20 text-black dark:text-white">
+      <h1 className="text-2xl text-center font-semibold mb-6 text-warm-gold dark:text-premium-gold">
         {match ? "Edit Product" : "Add Product"}
       </h1>
-      <div className="bg-white p-6 rounded-xl shadow space-y-8">
+      <div className="bg-white dark:bg-black/40 p-6 rounded-xl shadow space-y-8">
         <div>
-          <h2 className="font-semibold mb-4">Basic Information</h2>
+          <h2 className="font-semibold mb-4 text-gray-800 dark:text-gray-200">Basic Information</h2>
 
           <div className="grid grid-cols-2 gap-4">
-            <input name="title" value={form.title} placeholder="Product Title" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
+            <input name="title" value={form.title} placeholder="Product Title" onChange={handleChange} className="mb-4 border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
             <input
               name="tags"
               value={form.tags}
               placeholder="Tags"
               onChange={handleChange}
-              className="border p-3 rounded focus:outline-none"
+              className="border p-3 mb-4 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
 
           </div>
@@ -223,7 +198,7 @@ export default function AddProductPage() {
             value={form.description}
             placeholder="Description"
             onChange={handleChange}
-            className="border p-3 rounded w-full mt-4 focus:outline-none"
+            className="border p-3 rounded focus:outline-none w-full bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white mb-2"
           />
         </div>
 
@@ -234,9 +209,9 @@ export default function AddProductPage() {
 
           <div className="grid grid-cols-4 gap-4">
 
-            <input name="mrp" value={form.mrp} placeholder="MRP" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="discountPercent" value={form.discountPercent} placeholder="Discount %" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="stock" value={form.stock} placeholder="Stock" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
+            <input name="mrp" value={form.mrp} placeholder="MRP" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="discountPercent" value={form.discountPercent} placeholder="Discount %" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="stock" value={form.stock} placeholder="Stock" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
 
           </div>
 
@@ -253,12 +228,12 @@ export default function AddProductPage() {
 
           <div className="grid grid-cols-3 gap-4">
 
-            <input name="material" value={form.material} placeholder="Material" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="weaveType" value={form.weaveType} placeholder="Weave Type" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="pattern" value={form.pattern} placeholder="Pattern" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="style" value={form.style} placeholder="Style" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="pileHeight" value={form.pileHeight} placeholder="Pile Height" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="shape" value={form.shape} placeholder="Shape" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
+            <input name="material" value={form.material} placeholder="Material" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="weaveType" value={form.weaveType} placeholder="Weave Type" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="pattern" value={form.pattern} placeholder="Pattern" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="style" value={form.style} placeholder="Style" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="pileHeight" value={form.pileHeight} placeholder="Pile Height" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="shape" value={form.shape} placeholder="Shape" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
 
             <input
               type="text"
@@ -266,7 +241,7 @@ export default function AddProductPage() {
               placeholder="Primary Color"
               name="color"
               onChange={handleChange}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
 
             <input
@@ -275,7 +250,7 @@ export default function AddProductPage() {
               placeholder="Secondary Color"
               name="secondaryColor"
               onChange={handleChange}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
 
             <input
@@ -284,7 +259,7 @@ export default function AddProductPage() {
               placeholder="Origin Country"
               name="originCountry"
               onChange={handleChange}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
 
             <input
@@ -294,7 +269,7 @@ export default function AddProductPage() {
               name="manufacturer"
               defaultValue="Ishwar Rugs"
               onChange={handleChange}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
 
             <textarea
@@ -302,7 +277,7 @@ export default function AddProductPage() {
               value={form.careInstructions}
               name="careInstructions"
               onChange={handleChange}
-              className="border p-3 rounded w-full focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             />
           </div>
         </div>
@@ -314,9 +289,9 @@ export default function AddProductPage() {
 
           <div className="grid grid-cols-3 gap-4">
 
-            <input name="length" value={form.length} placeholder="Length (ft)" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="width" value={form.width} placeholder="Width (ft)" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
-            <input name="weight" value={form.weight} placeholder="Weight (kg)" onChange={handleChange} className="border p-3 rounded focus:outline-none" />
+            <input name="length" value={form.length} placeholder="Length (ft)" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="width" value={form.width} placeholder="Width (ft)" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
+            <input name="weight" value={form.weight} placeholder="Weight (kg)" onChange={handleChange} className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white" />
 
           </div>
         </div>
@@ -341,7 +316,7 @@ export default function AddProductPage() {
             onChange={(e) =>
               setThumbnail(e.target.files ? e.target.files[0] : null)
             }
-            className="border p-3 rounded w-full mb-4 focus:outline-none"
+            className="border p-3 rounded w-full mb-4 focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
           />
 
           <label className="block mt-4 mb-1 font-medium">
@@ -365,7 +340,7 @@ export default function AddProductPage() {
             onChange={(e) =>
               setImages(e.target.files ? Array.from(e.target.files) : [])
             }
-            className="border p-3 rounded w-full focus:outline-none"
+            className="border p-3 rounded w-full mb-4 focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
           />
 
 
@@ -377,11 +352,11 @@ export default function AddProductPage() {
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             >
               <option value="">Select Category</option>
 
-              {categories.map((cat) => (
+              {categories.map((cat: any) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.name}
                 </option>
@@ -391,11 +366,11 @@ export default function AddProductPage() {
             <select
               value={collectionId}
               onChange={(e) => setCollectionId(e.target.value)}
-              className="border p-3 rounded w-full mb-4 focus:outline-none"
+              className="border p-3 rounded focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
             >
               <option value="">Select Collection</option>
 
-              {collections.map((col) => (
+              {collections.map((col: any) => (
                 <option key={col._id} value={col._id}>
                   {col.name}
                 </option>
@@ -405,7 +380,18 @@ export default function AddProductPage() {
 
         </div>
 
-        <button className="bg-premium-gold text-white px-4 py-2 rounded-lg" onClick={handleSubmit}>
+        <button className="
+    bg-premium-gold
+    text-white
+    px-4 py-2
+    rounded-lg
+    shadow-md
+
+    dark:bg-gradient-to-r
+    dark:from-yellow-400
+    dark:to-yellow-600
+    dark:text-black
+  " onClick={handleSubmit}>
           Save Product
         </button>
 

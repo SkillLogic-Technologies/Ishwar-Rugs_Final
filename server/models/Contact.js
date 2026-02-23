@@ -8,6 +8,8 @@ const contactSchema = new mongoose.Schema(
         inquiryType : { type: String, enum: ["general", "collection_inquiry", "custom_design"], default: "general" },
         subject : { type: String, required: true },
         message : { type: String, required: true },
+        replyMessage: String,
+        repliedAt: Date,
         status: { type: String, enum: ["new", "seen", "replied"], default: "new" },
     },
     { timestamps : true }
