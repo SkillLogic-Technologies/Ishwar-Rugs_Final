@@ -134,7 +134,7 @@ export default function ModernNavigation() {
   return (
     <nav className="fixed w-full top-0 z-50 glass-effect border-b border-white/10">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-2 lg:px-8">
 
         <div className="flex justify-between items-center h-16 lg:h-20">
 
