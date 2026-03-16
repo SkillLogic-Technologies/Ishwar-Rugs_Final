@@ -39,13 +39,13 @@ export default function Home() {
     });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       {/* Hero Carousel */}
       <HeroCarousel />
       <Categories/>
 
       {/* Brand Introduction */}
-      <section className="py-10 px-4 bg-gradient-to-b from-background via-luxury-brown to-background">
+      <section className="py-10  bg-gradient-to-b from-background via-luxury-brown to-background">
         <div className="max-w-8xl mx-auto text-center">
           <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-premium-gold leading-relaxed mb-8 font-light">
             Fine handcrafted carpets since 1925
