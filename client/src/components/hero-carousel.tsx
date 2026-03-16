@@ -87,7 +87,7 @@ export default function HeroCarousel() {
   if (!slides.length) return null;
 
   return (
-    <section className="relative mt-20 h-[70vh] md:h-[90vh] lg:h-screen overflow-hidden">
+    <section className="relative mt-16 h-[70vh] md:h-[90vh] lg:h-screen overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
