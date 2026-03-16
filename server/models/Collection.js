@@ -6,7 +6,7 @@ const collectionSchema = new mongoose.Schema(
         name: { type: String, required: true, unique: true, trim: true },
         slug: { type: String, unique: true, trim: true },
         description: { type: String },
-        image: { type: String }, 
+        image: [{ type: String }] ,
         isActive: { type: Boolean, default: true }
     },
     { 

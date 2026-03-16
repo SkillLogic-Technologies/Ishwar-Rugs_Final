@@ -8,12 +8,12 @@ const router = express.Router();
 
 router.route("/")
 .get(getCollections)
-.post(isAuth, isAdmin, upload.single("image"), createCollection)
+.post(isAuth, isAdmin, upload.array("image", 3), createCollection)
 
 router.route("/:slug").get(getCollectionBySlug)
 
 router.route("/:id")
-.put( isAuth, isAdmin, upload.single("image"), updateCollection)
+.put( isAdmin, upload.array("image", 3), updateCollection)
 .delete(isAuth, isAdmin, deleteCollection)
 
 
