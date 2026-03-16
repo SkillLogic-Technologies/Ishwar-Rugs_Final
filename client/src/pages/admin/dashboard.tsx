@@ -18,20 +18,20 @@ export default function DashboardPage() {
     icon: React.ElementType;
   }
 
-  const data = [
-    { name: "Jan", users: 25 },
-    { name: "Feb", users: 18 },
-    { name: "Mar", users: 22 },
-    { name: "Apr", users: 15 },
-    { name: "May", users: 20 },
-    { name: "Jun", users: 12 },
-    { name: "Jul", users: 18 },
-    { name: "Aug", users: 14 },
-    { name: "Sep", users: 21 },
-    { name: "Oct", users: 19 },
-    { name: "Nov", users: 28 },
-    { name: "Dec", users: 25 },
-  ];
+  // const data = [
+  //   { name: "Jan", users: 25 },
+  //   { name: "Feb", users: 18 },
+  //   { name: "Mar", users: 22 },
+  //   { name: "Apr", users: 15 },
+  //   { name: "May", users: 20 },
+  //   { name: "Jun", users: 12 },
+  //   { name: "Jul", users: 18 },
+  //   { name: "Aug", users: 14 },
+  //   { name: "Sep", users: 21 },
+  //   { name: "Oct", users: 19 },
+  //   { name: "Nov", users: 28 },
+  //   { name: "Dec", users: 25 },
+  // ];
 
   const [stats, setStats] = useState<Stat[]>([]);
   const [graphData, setGraphData] = useState([]);
@@ -86,6 +86,7 @@ export default function DashboardPage() {
     };
 
     fetchStats();
+    fetchGraph();
   }, []);
   return (
     <div className="mt-20">
