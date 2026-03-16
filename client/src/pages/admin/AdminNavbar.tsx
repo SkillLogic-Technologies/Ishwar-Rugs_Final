@@ -11,8 +11,14 @@ export default function AdminNavbar({ setIsOpen }) {
   const { theme, setTheme } = useTheme();
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
   const adminName = localStorage.getItem("adminName") || "";
   const firstLetter = adminName.charAt(0).toUpperCase();
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminName");
+    navigate("/admin/login");
+  };
 
   return (
     <div
@@ -56,7 +62,7 @@ export default function AdminNavbar({ setIsOpen }) {
         </button>
       </div>
 
-      <div className="flex  items-center">
+      <div className="flex items-center">
         <Button
           variant="ghost"
           size="icon"
@@ -75,23 +81,49 @@ export default function AdminNavbar({ setIsOpen }) {
           )}
         </Button>
 
-        <div
-          className="
+        {/* USER AREA */}
+        <div className="relative group">
+          <div
+            className="
         flex items-center gap-4
-       md:px-5 md:py-2 md:rounded-lg md:shadow
-
+        md:px-5 md:py-2 md:rounded-lg md:shadow
         md:bg-warm-gold md:text-white
       "
-        >
-          <div className="w-8 h-8 md:bg-white bg-warm-gold rounded-full text-black flex items-center justify-center">
-            {firstLetter}
+          >
+            <div className="w-8 h-8 md:bg-white bg-warm-gold rounded-full text-black flex items-center justify-center">
+              {firstLetter}
+            </div>
+
+            <span className="md:text-sm md:font-medium hidden md:block">
+              {adminName}
+            </span>
           </div>
 
-          <span className="md:text-sm md:font-medium hidden md:block">
-            {adminName}
-          </span>
+          {/* LOGOUT DROPDOWN */}
+          <div
+            className="
+            absolute right-0 mt-2 w-28 
+            bg-white dark:bg-neutral-800
+            border border-gray-200 dark:border-neutral-700
+            rounded shadow-md
+            opacity-0 group-hover:opacity-100
+            invisible group-hover:visible
+            transition-all duration-200
+          "
+          >
+            <button
+              onClick={handleLogout}
+              className="
+              w-full text-left px-4 py-2 text-sm
+              hover:bg-gray-100 dark:hover:bg-neutral-700
+            "
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
+
       <button
         className="bg-warm-gold md:hidden  text-white p-2 rounded shadow"
         onClick={() => setIsOpen(true)}
