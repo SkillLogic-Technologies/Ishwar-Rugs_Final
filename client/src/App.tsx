@@ -56,14 +56,13 @@ function Router() {
 
   const fetchCartCount = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/user/cart",
-        { withCredentials: true }
-      );
+      const res = await axios.get("http://localhost:5000/api/user/cart", {
+        withCredentials: true,
+      });
       const items = res.data.items || [];
       const count = items.reduce(
         (acc: number, item: any) => acc + item.quantity,
-        0
+        0,
       );
       setCartCount(count);
     } catch {
@@ -72,10 +71,9 @@ function Router() {
   };
 
   const fetchWishlist = async () => {
-    const res = await axios.get(
-      "http://localhost:5000/api/user/wishlist",
-      { withCredentials: true }
-    );
+    const res = await axios.get("http://localhost:5000/api/user/wishlist", {
+      withCredentials: true,
+    });
     const items = res.data.data || [];
     setWishlistCount(items.length);
   };
@@ -167,8 +165,22 @@ function Router() {
             )}
           />
 
-          <Route path="/admin/inquiries" component={InquiriesPage} />
-          <Route path="/admin/categories" component={AdminCategories} />
+          <Route
+            path="/admin/inquiries"
+            component={() => (
+              <AdminLayout>
+                <InquiriesPage />
+              </AdminLayout>
+            )}
+          />
+          <Route
+            path="/admin/categories"
+            component={() => (
+              <AdminLayout>
+                <AdminCategories />
+              </AdminLayout>
+            )}
+          />
 
           <Route
             path="/admin/customers"
@@ -179,9 +191,16 @@ function Router() {
             )}
           />
 
-          <Route path="/admin/orders" component={AdminOrders} />
+          <Route
+            path="/admin/orders"
+            component={() => (
+              <AdminLayout>
+                <AdminOrders />
+              </AdminLayout>
+            )}
+          />
           <Route path="/verify" component={Verify} />
-
+          <Route path="/orders" component={OrdersPage} />
           {/* Extra routes */}
           <Route path="/wishlist" component={WishlistPage} />
           <Route path="/cart" component={CartPage} />
