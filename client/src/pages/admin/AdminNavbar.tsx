@@ -34,7 +34,7 @@ export default function AdminNavbar({ setIsOpen }) {
       className="
        h-20 fixed top-0 z-10 right-0 
       flex items-center md:justify-between 
-      px-4 shadow-md gap-3 w-full md:w-[83%]
+      px-4 shadow-md gap-3 w-full lg:w-[83%]
       bg-gray-50 dark:bg-neutral-900
       border-b border-gray-200 dark:border-neutral-800
     "
@@ -135,7 +135,7 @@ export default function AdminNavbar({ setIsOpen }) {
       </div>
 
       <button
-        className="bg-warm-gold md:hidden text-white p-2 rounded shadow"
+        className="bg-warm-gold lg:hidden text-white p-2 rounded shadow"
         onClick={() => setIsOpen(true)}
       >
         <Menu size={20} />
