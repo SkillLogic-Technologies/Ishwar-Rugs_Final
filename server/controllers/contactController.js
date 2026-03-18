@@ -1,6 +1,6 @@
 import Contact from "../models/Contact.js";
 import sendMessage from "../utils/Contact.util.js"
-import sendReplyEmail from "../utils/sendReplyEmail.js";
+import sendReplyEmail from "../utils/SendReplyEmail.js";
 
 
 async function contactUs(req, res) {
