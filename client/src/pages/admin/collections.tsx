@@ -24,7 +24,7 @@ export default function AdminCollections() {
       setLoading(true);
 
       const res = await axios.get(
-        `http://127.0.0.1:5000/api/collection?page=${page}&limit=10`
+        `/api/collection?page=${page}&limit=10`
       );
 
       setCollections(res.data.data || []);
@@ -48,7 +48,7 @@ export default function AdminCollections() {
 
     try {
 
-      await axios.delete(`http://127.0.0.1:5000/api/collection/${id}`);
+      await axios.delete(`/api/collection/${id}`);
 
       setCollections((prev) => prev.filter((c) => c._id !== id));
 
@@ -111,7 +111,7 @@ export default function AdminCollections() {
                   <td className="p-4">
 
                     <img
-                      src={`http://127.0.0.1:5000/${
+                      src={`/${
                         Array.isArray(collection.image)
                           ? collection.image[0]
                           : collection.image
@@ -176,7 +176,7 @@ export default function AdminCollections() {
             <div className="flex gap-4">
 
               <img
-                src={`http://127.0.0.1:5000/${
+                src={`/${
                   Array.isArray(collection.image)
                     ? collection.image[0]
                     : collection.image

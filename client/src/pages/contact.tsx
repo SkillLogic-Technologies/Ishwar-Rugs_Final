@@ -57,7 +57,7 @@ export default function Contact() {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:5000/api/contact-us/",
+        "/api/contact-us/",
         data,
         {
           withCredentials: true,

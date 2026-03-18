@@ -189,7 +189,7 @@ export default function AddCollection() {
 
           {match && existingThumbnail && (
             <img
-              src={`http://127.0.0.1:5000/${existingThumbnail}`}
+              src={`/${existingThumbnail}`}
               className="w-24 h-24 object-cover mb-3 rounded border dark:border-neutral-700"
             />
           )}

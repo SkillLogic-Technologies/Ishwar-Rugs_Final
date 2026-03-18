@@ -40,7 +40,7 @@ export default function HeroCarousel() {
   }, []);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/collection")
+    fetch("/api/collection")
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -51,11 +51,11 @@ export default function HeroCarousel() {
 
             // desktop = index 0
             if (device === "desktop") {
-              imagePath = images[0] ? `http://127.0.0.1:5000/${images[0]}` : "";
+              imagePath = images[0] ? `/${images[0]}` : "";
             }
             // mobile + tablet = index 1
             else {
-              imagePath = images[1] ? `http://127.0.0.1:5000/${images[1]}` : "";
+              imagePath = images[1] ? `/${images[1]}` : "";
             }
 
             return {

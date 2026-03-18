@@ -369,7 +369,7 @@ export default function AddProductPage() {
           </label>
           {match && existingThumbnail && (
             <img
-              src={`http://127.0.0.1:5000/${existingThumbnail}`}
+              src={`/${existingThumbnail}`}
               className="w-24 h-24 object-cover mb-2 rounded"
             />
           )}
@@ -390,7 +390,7 @@ export default function AddProductPage() {
               {existingImages.map((img, i) => (
                 <img
                   key={i}
-                  src={`http://127.0.0.1:5000/${img}`}
+                  src={`/${img}`}
                   className="w-24 h-24 object-cover rounded"
                 />
               ))}

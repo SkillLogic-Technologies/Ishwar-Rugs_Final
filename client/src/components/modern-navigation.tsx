@@ -63,7 +63,7 @@ export default function ModernNavigation() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/collection/");
+        const res = await fetch("/api/collection/");
         const data = await res.json();
 
         if (data.success) {
@@ -116,7 +116,7 @@ export default function ModernNavigation() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://127.0.0.1:5000/api/users/logout", {
+      await fetch("/api/users/logout", {
         method: "POST",
         credentials: "include",
       });

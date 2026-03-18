@@ -130,7 +130,7 @@ export default function AddProductPage() {
                     </label>
                     {match && existingImage && (
                         <img
-                            src={`http://127.0.0.1:5000/${existingImage}`}
+                            src={`/${existingImage}`}
                             className="w-24 h-24 object-cover mb-2 rounded"
                         />
                     )}

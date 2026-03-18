@@ -17,7 +17,7 @@
 //   useEffect(() => {
 //     const fetchCollections = async () => {
 //       try {
-//         const res = await fetch("http://127.0.0.1:5000/api/collection/");
+//         const res = await fetch("/api/collection/");
 //         const data = await res.json();
 //         if (data.success) {
 //           setCollections(data.data);
@@ -56,7 +56,7 @@
 
 //                 {/* FIRST IMAGE ONLY */}
 //                 <img
-//                   src={`http://127.0.0.1:5000/${c.image[0]}`}
+//                   src={`/${c.image[0]}`}
 //                   alt={c.name}
 //                   className="w-full h-64 object-cover"
 //                 />
@@ -98,7 +98,7 @@ export default function CollectionsPage() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/collection/");
+        const res = await fetch("/api/collection/");
         const data = await res.json();
         if (data.success) {
           setCollections(data.data);
@@ -147,7 +147,7 @@ export default function CollectionsPage() {
                     {images.map((img, idx) => (
                       <img
                         key={idx}
-                        src={`http://127.0.0.1:5000/${img}`}
+                        src={`/${img}`}
                         alt={c.name}
                         className={`w-full h-64 object-cover absolute top-0 left-0 transition-opacity duration-500 ${
                           idx === 0 ? "opacity-100" : "opacity-0"
