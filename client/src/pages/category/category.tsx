@@ -24,7 +24,7 @@ export default function CategoryPage() {
 
   const [match, params] = useRoute("/category/:slug");
   const slug = params?.slug;
-  const BASE_URL = "http://localhost:5000/";
+  const BASE_URL = "/";
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState<Record<string, boolean>>({});

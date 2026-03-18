@@ -14,7 +14,7 @@ export default function Categories() {
     image: string;
   }
 
-  const BASE_URL = "http://localhost:5000/";
+  const BASE_URL = "/";
   const [categories, setCategories] = useState<Category[]>([]);
   const [, setLocation] = useLocation();
   const swiperRef = useRef<any>(null);

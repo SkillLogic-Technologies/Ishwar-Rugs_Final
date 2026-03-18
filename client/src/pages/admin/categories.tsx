@@ -11,7 +11,7 @@ export default function CategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/category');
+      const res = await axios.get('/api/category');
       setCategories(res.data.data);
     } catch (error) {
       console.error(error);
@@ -39,7 +39,7 @@ export default function CategoriesPage() {
             toast.dismiss(t.id);
             const loadingToast = toast.loading("Deleting category...");
             try {
-              await axios.delete(`http://localhost:5000/api/category/${id}`);
+              await axios.delete(`/api/category/${id}`);
               toast.dismiss(loadingToast);
               toast.success("Category deleted successfully 🗑️");
 
@@ -107,7 +107,7 @@ export default function CategoriesPage() {
 
                 <td className="p-4">
                   <img
-                    src={`http://localhost:5000/${category.image}`}
+                    src={`/${category.image}`}
                     className="w-14 h-14 object-cover rounded"
                   />
                 </td>

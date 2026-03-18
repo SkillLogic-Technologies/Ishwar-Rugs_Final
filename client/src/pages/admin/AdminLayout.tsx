@@ -11,7 +11,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        await axios.get("http://localhost:5000/api/admin/profile", {
+        await axios.get("/api/admin/profile", {
           withCredentials: true,
         });
       } catch (error) {

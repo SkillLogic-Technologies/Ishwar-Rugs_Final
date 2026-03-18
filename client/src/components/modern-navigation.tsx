@@ -86,7 +86,7 @@ export default function ModernNavigation() {
     const refreshCart = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/user/cart",
+          "/api/user/cart",
           { withCredentials: true }
         );
 

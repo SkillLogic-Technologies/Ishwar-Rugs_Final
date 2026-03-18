@@ -12,7 +12,7 @@ export default function InquiryDetailPage() {
 
   const handleReply = async () => {
     try {
-      await axios.post(`http://localhost:5000/api/contact-us/${id}/reply`,
+      await axios.post(`/api/contact-us/${id}/reply`,
         { replyMessage: reply }
       );
       toast.success("Reply sent successfully");
@@ -27,7 +27,7 @@ export default function InquiryDetailPage() {
   useEffect(() => {
     const fetchInquiry = async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/contact-us/${id}`
+        `/api/contact-us/${id}`
       );
       setInquiry(res.data.data);
     };

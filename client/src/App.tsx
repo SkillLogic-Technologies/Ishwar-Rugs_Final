@@ -56,7 +56,7 @@ function Router() {
 
   const fetchCartCount = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/user/cart", {
+      const res = await axios.get("/api/user/cart", {
         withCredentials: true,
       });
       const items = res.data.items || [];
@@ -71,7 +71,7 @@ function Router() {
   };
 
   const fetchWishlist = async () => {
-    const res = await axios.get("http://localhost:5000/api/user/wishlist", {
+    const res = await axios.get("/api/user/wishlist", {
       withCredentials: true,
     });
     const items = res.data.data || [];

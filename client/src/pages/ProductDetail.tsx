@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
 
-const BASE_URL = "http://localhost:5000/";
+const BASE_URL = "/";
 
 const ProductDetail = () => {
   

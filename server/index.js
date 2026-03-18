@@ -29,7 +29,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -55,7 +55,7 @@ app.use('/api/contact-us', contactRoutes)
 app.use('/api/admin', dashboardStatsRoutes)
 
 const PORT = Number(process.env.PORT) || 5000;
-const HOST = "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 
 app.get("/", (req, res) => {
   res.json({ status: "Server is running" });

@@ -38,7 +38,7 @@ export default function DashboardPage() {
 
   const fetchGraph = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/activity/users-graph",
+      "/api/activity/users-graph",
     );
     setGraphData(res.data.graph);
   };
@@ -46,7 +46,7 @@ export default function DashboardPage() {
     const fetchStats = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/admin/dashboard-stats",
+          "/api/admin/dashboard-stats",
           { withCredentials: true },
         );
 

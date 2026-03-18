@@ -19,7 +19,7 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/product?page=${page}&limit=10&title=${searchQuery}`);
+      const res = await axios.get(`/api/product?page=${page}&limit=10&title=${searchQuery}`);
       setProducts(res.data.data);
       setTotalPages(res.data.totalPages);
 
@@ -49,7 +49,7 @@ export default function ProductsPage() {
 
             try {
               await axios.delete(
-                `http://localhost:5000/api/product/${id}`
+                `/api/product/${id}`
               );
 
               toast.success("Product deleted successfully ✅");
@@ -119,7 +119,7 @@ export default function ProductsPage() {
 
                 <td className="p-4">
                   <img
-                    src={`http://localhost:5000/${product.thumbnail}`}
+                    src={`/${product.thumbnail}`}
                     className="w-14 h-14 object-cover rounded"
                   />
                 </td>

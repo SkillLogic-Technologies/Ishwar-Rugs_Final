@@ -41,14 +41,14 @@ export default function AddProductPage() {
 
             if (match && categoryId) {
             
-                await axios.put(`http://localhost:5000/api/category/${categoryId}`,
+                await axios.put(`/api/category/${categoryId}`,
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
 
                 toast.success("Category Updated Successfully ✅");
             } else {
-                await axios.post("http://localhost:5000/api/category",
+                await axios.post("/api/category",
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
@@ -65,7 +65,7 @@ export default function AddProductPage() {
 
     const fetchCategoryBySlug = async (slug: string) => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/category/${slug}`
+            const res = await axios.get(`/api/category/${slug}`
             );
 
             const category = res.data.data;

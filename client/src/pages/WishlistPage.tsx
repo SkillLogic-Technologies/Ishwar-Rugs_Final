@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useWishlist } from "@/context/WishlistContext";
 
 const WishlistPage = () => {
-  const BASE_URL = "http://localhost:5000/"
+  const BASE_URL = "/"
   type WishlistItem = any;
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const { setWishlistCount } = useWishlist();

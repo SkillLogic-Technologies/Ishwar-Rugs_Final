@@ -75,12 +75,12 @@ export default function AddCollection() {
 
       if (match && params?.slug) {
         await axios.put(
-          `http://localhost:5000/api/collection/${collectionId}`,
+          `/api/collection/${collectionId}`,
           formData
         );
         alert("Collection Updated ");
       } else {
-        await axios.post("http://localhost:5000/api/collection", formData);
+        await axios.post("/api/collection", formData);
         alert("Collection Added Successfully");
 
         setForm({
@@ -102,7 +102,7 @@ export default function AddCollection() {
   const fetchCollectionBySlug = async (slug: string) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/collection/${slug}`
+        `/api/collection/${slug}`
       );
 
       const col = res.data.data;

@@ -24,7 +24,7 @@ export default function InquiriesPage() {
 
   const fetchInquiries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/contact-us");
+      const res = await axios.get("/api/contact-us");
 
       const data = res.data?.data || [];
       setInquiries(Array.isArray(data) ? data : []);
@@ -38,7 +38,7 @@ export default function InquiriesPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/contact-us/${id}`);
+      await axios.delete(`/api/contact-us/${id}`);
       toast.success("Inquiry deleted successfully");
       fetchInquiries();
     } catch (error) {
@@ -48,7 +48,7 @@ export default function InquiriesPage() {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/contact-us/${id}`, {
+      await axios.put(`/api/contact-us/${id}`, {
         status: newStatus,
       });
 

@@ -5,7 +5,7 @@ import { Phone, MapPin, Truck } from "lucide-react";
 
 function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
-  const BASE_URL = "http://localhost:5000/";
+  const BASE_URL = "/";
 
  useEffect(() => {
   fetchOrders();

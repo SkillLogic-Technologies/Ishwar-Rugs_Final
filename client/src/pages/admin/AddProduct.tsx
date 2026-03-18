@@ -59,8 +59,8 @@ export default function AddProductPage() {
 
   const fetchDropdownData = async () => {
     try {
-      const catRes = await axios.get("http://localhost:5000/api/category");
-      const colRes = await axios.get("http://localhost:5000/api/collection");
+      const catRes = await axios.get("/api/category");
+      const colRes = await axios.get("/api/collection");
 
       setCategories(catRes.data.data);
       setCollections(colRes.data.data);
@@ -96,13 +96,13 @@ export default function AddProductPage() {
 
       if (match && params?.slug) {
         await axios.put(
-          `http://localhost:5000/api/product/${productId}`,
+          `/api/product/${productId}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } },
         );
         toast.success("Product updated successfully ✅");
       } else {
-        await axios.post("http://localhost:5000/api/product", formData, {
+        await axios.post("/api/product", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Product added successfully ✅");
@@ -116,7 +116,7 @@ export default function AddProductPage() {
 
   const fetchProductByslug = async (slug: string) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/product/${slug}`);
+      const res = await axios.get(`/api/product/${slug}`);
 
       const product = res.data.data;
 

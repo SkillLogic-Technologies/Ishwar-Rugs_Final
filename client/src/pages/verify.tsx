@@ -53,7 +53,7 @@ export default function Verify({
       setLoading(true);
       setMessage("");
 
-      const res = await fetch("http://localhost:5000/api/users/verify-otp", {
+      const res = await fetch("/api/users/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

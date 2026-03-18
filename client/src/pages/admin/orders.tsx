@@ -6,7 +6,7 @@ import { ShoppingBag, Truck, Phone } from "lucide-react";
 
 function AdminOrders() {
   const [orders, setOrders] = useState<any[]>([]);
-  const BASE_URL = "http://localhost:5000/";
+  const BASE_URL = "/";
 
   useEffect(() => {
     fetchOrders();

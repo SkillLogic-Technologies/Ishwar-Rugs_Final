@@ -13,7 +13,7 @@ const CartPage = () => {
   const { setCartCount } = useCart();
   const [, navigate] = useLocation();
 
-  const BASE_URL = "http://localhost:5000/";
+  const BASE_URL = "/";
 
   const [shippingAddress, setShippingAddress] = useState({
     fullName: "",

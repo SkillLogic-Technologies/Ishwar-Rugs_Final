@@ -5,7 +5,7 @@ const TrackVisit = () => {
   useEffect(() => {
     const track = async () => {
       await axios.post(
-        "http://localhost:5000/api/activity/track-visit",
+        "/api/activity/track-visit",
         {},
         {
           withCredentials: true, 
