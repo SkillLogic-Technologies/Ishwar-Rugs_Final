@@ -4,13 +4,17 @@ import axios from "axios";
 const TrackVisit = () => {
   useEffect(() => {
     const track = async () => {
-      await axios.post(
-        "/api/activity/track-visit",
-        {},
-        {
-          withCredentials: true, 
-        }
-      );
+      try {
+        await axios.post(
+          "/api/activity/track-visit",
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+      } catch {
+        // tracking is non-critical, silently fail
+      }
     };
 
     track();

@@ -7,31 +7,31 @@ export const api = {
   // 📦 Collections
   collections: {
     getAll: (): Promise<Collection[]> =>
-      fetch("/api/collections").then((res) => res.json()),
+      fetch("/api/collection").then((res) => res.json()).then(res => res.data || []),
 
     getFeatured: (): Promise<Collection[]> =>
-      fetch("/api/collections/featured").then((res) => res.json()),
+      fetch("/api/collection?isFeatured=true").then((res) => res.json()).then(res => res.data || []),
 
     getByCategory: (category: string): Promise<Collection[]> =>
-      fetch(`/api/collections/category/${category}`).then((res) => res.json()),
+      fetch(`/api/collection?category=${category}`).then((res) => res.json()).then(res => res.data || []),
 
     getBySlug: (slug: string): Promise<Collection> =>
-      fetch(`/api/collections/slug/${slug}`).then((res) => res.json()),
+      fetch(`/api/collection/slug/${slug}`).then((res) => res.json()).then(res => res.data),
   },
 
   // 🛒 Products
   products: {
     getAll: (): Promise<Product[]> =>
-      fetch("/api/products").then((res) => res.json()),
+      fetch("/api/product").then((res) => res.json()).then(res => res.data || []),
 
     getFeatured: (): Promise<Product[]> =>
-      fetch("/api/products/featured").then((res) => res.json()),
+      fetch("/api/product?isFeatured=true").then((res) => res.json()).then(res => res.data || []),
 
     getByCollection: (collectionId: number): Promise<Product[]> =>
-      fetch(`/api/products/collection/${collectionId}`).then((res) => res.json()),
+      fetch(`/api/product?collection=${collectionId}`).then((res) => res.json()).then(res => res.data || []),
 
     getBySlug: (slug: string): Promise<Product> =>
-      fetch(`/api/products/${slug}`).then((res) => res.json()),
+      fetch(`/api/product/slug/${slug}`).then((res) => res.json()).then(res => res.data),
   },
 
   // ✉️ Inquiries

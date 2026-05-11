@@ -6,17 +6,17 @@ import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 const router = express.Router()
 
 router.route("/")
-.get(isAuth, isAdmin, getContacts)  
+.get(isAdmin, getContacts)
 .post(contactUs)
 
 router.route("/:id")
-.get(isAuth, isAdmin, getContactById) 
-.put(isAuth, isAdmin, updateContact)
-.delete(isAuth, isAdmin, deleteContact) 
+.get(isAdmin, getContactById)
+.put(isAdmin, updateContact)
+.delete(isAdmin, deleteContact)
 
 router.post(
   "/:id/reply",
-  isAuth, isAdmin,
+  isAdmin,
   sendReplyController
 );  
 

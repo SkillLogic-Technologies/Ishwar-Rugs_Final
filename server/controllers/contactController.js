@@ -14,7 +14,12 @@ async function contactUs(req, res) {
 
         const contact = await Contact.create(data)
 
-        await sendMessage({fullName, message, email, subject})
+        try {
+            await sendMessage({fullName, message, email, subject})
+        } catch (emailError) {
+            console.log("Email sending failed:", emailError.message);
+        }
+
         res.status(201).json({ success: true, message: "Message sent successfully", data: contact });
 
     } catch (error) {
@@ -81,11 +86,15 @@ async function sendReplyController(req, res){
       return res.status(404).json({ message: "Inquiry not found" });
     }
 
-    await sendReplyEmail({
-      email: inquiry.email,
-      subject: "Reply to your inquiry - IshwaRugs",
-      replyMessage,
-    });
+    try {
+      await sendReplyEmail({
+        email: inquiry.email,
+        subject: "Reply to your inquiry - IshwaRugs",
+        replyMessage,
+      });
+    } catch (emailError) {
+      console.log("Email sending failed:", emailError.message);
+    }
 
     inquiry.replyMessage = replyMessage;
     inquiry.status = "replied";

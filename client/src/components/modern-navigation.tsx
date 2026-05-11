@@ -67,12 +67,15 @@ export default function ModernNavigation() {
         const data = await res.json();
 
         if (data.success) {
-          const filtered = data.data.filter((c: any) =>
-            ["Velura Collection", "Velura Persian", "Flowing Aura"].includes(
+          // Use all collections or filter specific ones if they exist
+          const allCollections = data.data || [];
+          const filtered = allCollections.filter((c: any) =>
+            ["Velura Collection", "Velura Persian", "Flowing Aura", "Collection 1", "Collection 2", "Collection 3"].includes(
               c.name
             )
-          );
-          setCollections(filtered);
+          ) || allCollections.slice(0, 3);
+
+          setCollections(filtered.length > 0 ? filtered : allCollections.slice(0, 3));
         }
       } catch (err) {
         console.error("Collections fetch error:", err);

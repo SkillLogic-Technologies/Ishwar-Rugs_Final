@@ -147,7 +147,7 @@ export default function CollectionsPage() {
                     {images.map((img, idx) => (
                       <img
                         key={idx}
-                        src={`/${img}`}
+                        src={img}
                         alt={c.name}
                         className={`w-full h-64 object-cover absolute top-0 left-0 transition-opacity duration-500 ${
                           idx === 0 ? "opacity-100" : "opacity-0"

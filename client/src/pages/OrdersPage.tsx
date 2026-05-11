@@ -106,7 +106,7 @@ function OrdersPage() {
                 >
                   <Link href={`/product/${item.slug}`}>
                     <img
-                      src={`${BASE_URL}${item.image}`}
+                      src={item.image}
                       alt={item.title}
                       className="w-24 h-24 object-cover rounded cursor-pointer"
                     />

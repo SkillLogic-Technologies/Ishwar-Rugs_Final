@@ -186,13 +186,51 @@ const CartPage = () => {
       setIsAuthCompleted(false);
       setShowAuthFlow(false);
       openRazorpayCheckout(order, razorpayOrder);
-    } catch {
-      toast.error("Failed to place order. Please try again.");
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Failed to place order. Please try again.";
+      toast.error(errorMessage);
     }
   };
 
-  const openRazorpayCheckout = (order: any, razorpayOrder: any) => {
+  const openRazorpayCheckout = async (order: any, razorpayOrder: any) => {
     console.log("RAZORPAY KEY:", import.meta.env.VITE_RAZORPAY_KEY_ID);
+    console.log("RAZORPAY ORDER:", razorpayOrder);
+
+    if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
+      toast.error("Razorpay key not configured");
+      return;
+    }
+
+    // 🔧 In dev mode with mock orders, simulate payment success
+    if (razorpayOrder._dev_note) {
+      console.log("🧪 Dev Mode: Simulating successful payment...");
+      try {
+        const verifyRes = await axios.post(
+          `${BASE_URL}api/payment/verify`,
+          {
+            razorpay_order_id: razorpayOrder.id,
+            razorpay_payment_id: "dev_payment_" + Date.now(),
+            razorpay_signature: "dev_signature_" + Date.now(),
+            orderId: order._id,
+          },
+          { withCredentials: true },
+        );
+
+        if (verifyRes.data.success) {
+          setCartItems([]);
+          setCartTotal(0);
+          setCartCount(0);
+          window.dispatchEvent(new Event("cartUpdated"));
+          toast.success("Payment Successful (Dev Mode)");
+          navigate("/orders");
+        }
+      } catch (error: any) {
+        console.error("Dev payment error:", error);
+        toast.error(error.response?.data?.message || "Payment failed");
+      }
+      return;
+    }
+
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: razorpayOrder.amount,
@@ -214,16 +252,11 @@ const CartPage = () => {
           );
 
           if (verifyRes.data.success) {
-            // ✅ Clear frontend cart state
             setCartItems([]);
             setCartTotal(0);
             setCartCount(0);
-
-            // ✅ Notify Navbar to refresh
             window.dispatchEvent(new Event("cartUpdated"));
-
             toast.success("Payment Successful");
-
             navigate("/orders");
           } else {
             toast.error("Payment verification failed");
@@ -237,10 +270,21 @@ const CartPage = () => {
       theme: {
         color: "#d4af37",
       },
+
+      modal: {
+        ondismiss: function () {
+          console.log("Razorpay modal dismissed");
+        },
+      },
     };
 
-    const rzp = new (window as any).Razorpay(options);
-    rzp.open();
+    try {
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error: any) {
+      console.error("Razorpay initialization error:", error);
+      toast.error("Failed to initialize payment gateway. Please try again.");
+    }
   };
   return (
     <div className="min-h-screen bg-background text-foreground pt-32 pb-20">
@@ -251,11 +295,12 @@ const CartPage = () => {
             <p className="text-muted-foreground">Your cart is empty</p>
           )}
 
-          {cartItems.map((item: any) => (
+          {cartItems.map((item: any) =>
+            item.product ? (
             <Link key={item._id} href={`/product/${item.product.slug}`}>
               <div className="group flex gap-6 p-6 rounded-2xl border bg-card hover:shadow-lg transition">
                 <img
-                  src={`${BASE_URL}${item.product?.thumbnail}`}
+                  src={item.product?.thumbnail}
                   className="w-28 h-28 object-cover rounded-xl"
                 />
 
@@ -310,7 +355,8 @@ const CartPage = () => {
                 </div>
               </div>
             </Link>
-          ))}
+            ) : null
+          )}
         </div>
 
         {/* RIGHT SIDE */}

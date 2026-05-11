@@ -51,11 +51,11 @@ export default function HeroCarousel() {
 
             // desktop = index 0
             if (device === "desktop") {
-              imagePath = images[0] ? `/${images[0]}` : "";
+              imagePath = images[0] ? images[0] : "";
             }
             // mobile + tablet = index 1
             else {
-              imagePath = images[1] ? `/${images[1]}` : "";
+              imagePath = images[1] ? images[1] : "";
             }
 
             return {
@@ -81,7 +81,15 @@ export default function HeroCarousel() {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
 
-    return () => clearInterval(timer);
+    const resetTimer = () => {
+      clearInterval(timer);
+    };
+
+    window.addEventListener("click", resetTimer);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("click", resetTimer);
+    };
   }, [slides]);
 
   if (!slides.length) return null;
@@ -99,7 +107,7 @@ export default function HeroCarousel() {
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full"
+              className="w-full h-full object-cover"
             />
           )}
 
@@ -118,7 +126,7 @@ export default function HeroCarousel() {
               )}
 
               <Link href={slide.link}>
-                <Button className="px-8 py-4 text-white border border-white rounded-full text-sm md:text-lg font-semibold backdrop-blur bg-white/10 hover:bg-white/20">
+                <Button className="px-8 py-4 text-white border border-white rounded-full font-serif font-semibold text-lg md:text-2xl backdrop-blur bg-white/10 hover:bg-white/20 tracking-wide">
                   {slide.buttonText}
                 </Button>
               </Link>
@@ -127,27 +135,25 @@ export default function HeroCarousel() {
         </div>
       ))}
 
-      <Button
-        variant="ghost"
-        size="icon"
+      <button
         onClick={() =>
           setCurrentSlide(
             currentSlide === 0 ? slides.length - 1 : currentSlide - 1,
           )
         }
-        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-white z-20"
+        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-white z-20 bg-black/30 hover:bg-black/50 rounded-full p-2 transition"
+        aria-label="Previous slide"
       >
         <ChevronLeft size={32} />
-      </Button>
+      </button>
 
-      <Button
-        variant="ghost"
-        size="icon"
+      <button
         onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)}
-        className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 text-white z-20"
+        className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 text-white z-20 bg-black/30 hover:bg-black/50 rounded-full p-2 transition"
+        aria-label="Next slide"
       >
         <ChevronRight size={32} />
-      </Button>
+      </button>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {slides.map((_, index) => (

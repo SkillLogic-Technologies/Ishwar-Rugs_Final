@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 import axios from "axios";
 import { useRoute } from "wouter";
 import toast from "react-hot-toast";
 
 export default function AddProductPage() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState([]);
   const [existingThumbnail, setExistingThumbnail] = useState("");
@@ -19,7 +21,7 @@ export default function AddProductPage() {
   const [productId, setProductId] = useState("");
   const [match, params] = useRoute("/admin/edit-products/:slug");
 
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const [form, setForm] = useState({
     title: "",
@@ -107,7 +109,7 @@ export default function AddProductPage() {
         });
         toast.success("Product added successfully ✅");
       }
-      navigate("/admin/products");
+      setLocation("/admin/products");
     } catch (error) {
       console.log(error);
       toast.error("Error while adding product ❌");
@@ -367,31 +369,48 @@ export default function AddProductPage() {
           <label className="block mb-1 font-medium">
             Thumbnail (Only 1 Image)
           </label>
-          {match && existingThumbnail && (
+          {(thumbnailPreview || (match && existingThumbnail)) && (
             <img
-              src={`/${existingThumbnail}`}
+              src={thumbnailPreview || `/${existingThumbnail}`}
               className="w-24 h-24 object-cover mb-2 rounded"
+              alt="Thumbnail preview"
             />
           )}
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              setThumbnail(e.target.files ? e.target.files[0] : null)
-            }
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                setThumbnail(e.target.files[0]);
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  setThumbnailPreview(event.target?.result as string);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
             className="border p-3 rounded w-full mb-4 focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
           />
 
           <label className="block mt-4 mb-1 font-medium">
             Rug Gallery (Minimum 6 Images)
           </label>
-          {match && existingImages.length > 0 && (
+          {(imagePreviews.length > 0 || (match && existingImages.length > 0)) && (
             <div className="grid grid-cols-4 gap-2 mb-3">
-              {existingImages.map((img, i) => (
+              {imagePreviews.map((preview, i) => (
                 <img
-                  key={i}
+                  key={`new-${i}`}
+                  src={preview}
+                  className="w-24 h-24 object-cover rounded border-2 border-green-500"
+                  alt={`New image ${i + 1}`}
+                />
+              ))}
+              {match && existingImages.map((img, i) => (
+                <img
+                  key={`existing-${i}`}
                   src={`/${img}`}
                   className="w-24 h-24 object-cover rounded"
+                  alt={`Existing image ${i + 1}`}
                 />
               ))}
             </div>
@@ -400,9 +419,24 @@ export default function AddProductPage() {
             type="file"
             multiple
             accept="image/*"
-            onChange={(e) =>
-              setImages(e.target.files ? Array.from(e.target.files) : [])
-            }
+            onChange={(e) => {
+              if (e.target.files) {
+                const filesArray = Array.from(e.target.files);
+                setImages(filesArray);
+
+                const previews: string[] = [];
+                filesArray.forEach((file) => {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    previews.push(event.target?.result as string);
+                    if (previews.length === filesArray.length) {
+                      setImagePreviews(previews);
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                });
+              }
+            }}
             className="border p-3 rounded w-full mb-4 focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
           />
         </div>

@@ -116,7 +116,17 @@ async function getCart(req, res) {
       return res.status(200).json({ success: true, items: [] });
     }
 
-    res.status(200).json({ success: true, items: cart.items, cartTotal: cart.cartTotal, });
+    // Filter out items with null products
+    const validItems = cart.items.filter(item => item.product !== null);
+
+    // If cart had invalid items, remove them
+    if (validItems.length < cart.items.length) {
+      cart.items = validItems;
+      cart.cartTotal = validItems.reduce((acc, item) => acc + (item.total || 0), 0);
+      await cart.save();
+    }
+
+    res.status(200).json({ success: true, items: validItems, cartTotal: cart.cartTotal, });
 
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

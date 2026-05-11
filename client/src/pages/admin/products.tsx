@@ -3,8 +3,7 @@
 import axios from "axios";
 import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "wouter";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import toast from "react-hot-toast";
 
 export default function ProductsPage() {
@@ -12,9 +11,9 @@ export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const location = useLocation();
+  const [location] = useLocation();
 
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(new URL(location, window.location.href).search);
   const searchQuery = queryParams.get("title") || "";
 
   const fetchProducts = async () => {
@@ -119,7 +118,7 @@ export default function ProductsPage() {
 
                 <td className="p-4">
                   <img
-                    src={`/${product.thumbnail}`}
+                    src={product.thumbnail}
                     className="w-14 h-14 object-cover rounded"
                   />
                 </td>

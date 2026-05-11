@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import {
   MapPin,
@@ -30,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import toast from "react-hot-toast";
 
 export default function Contact() {
   const form = useForm({
@@ -43,31 +43,26 @@ export default function Contact() {
     },
   });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const data = {
-      fullName: form.getValues("fullName") as string,
-      email: form.getValues("email") as string,
-      phone: form.getValues("phone") as string,
-      subject: form.getValues("subject") as string,
-      message: form.getValues("message") as string,
-      inquiryType: form.getValues("inquiryType") as string,
-    };
-
+  const onSubmit = async (data: any) => {
     try {
       const res = await axios.post(
-        "/api/contact-us/",
+        "/api/contact-us",
         data,
         {
           withCredentials: true,
         },
       );
 
-      alert("Inquiry Sent Successfully!");
-      form.reset();
-    } catch (error) {
-      alert("Failed to send Inquiry! Please try again.");
+      if (res.data.success) {
+        toast.success("Inquiry Sent Successfully! ✅");
+        form.reset();
+      } else {
+        toast.error(res.data.message || "Failed to send inquiry");
+      }
+    } catch (error: any) {
+      console.error("Contact form error:", error);
+      const message = error.response?.data?.message || error.message || "Failed to send inquiry. Please try again.";
+      toast.error(message);
     }
   };
 
@@ -223,7 +218,7 @@ export default function Contact() {
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}

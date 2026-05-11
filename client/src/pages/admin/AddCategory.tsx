@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "wouter";
 import axios from "axios";
 import { useRoute } from "wouter";
 import toast from "react-hot-toast"
@@ -11,7 +11,8 @@ export default function AddProductPage() {
     const [categoryId, setCategoryId] = useState("");
     const [existingImage, setExistingImage] = useState("");
     const [image, setImage] = useState<File | null>(null);
-    const navigate = useNavigate()
+    const [imagePreview, setImagePreview] = useState("");
+    const [, setLocation] = useLocation();
 
     const [form, setForm] = useState({
         name: "",
@@ -56,7 +57,7 @@ export default function AddProductPage() {
                 toast.success("Category Added Successfully ✅");
             }
 
-            navigate("/admin/categories");
+            setLocation("/admin/categories");
 
         } catch (error) {
             console.log(error);
@@ -128,19 +129,27 @@ export default function AddProductPage() {
                     <label className="block mb-1 font-medium">
                         Category Image
                     </label>
-                    {match && existingImage && (
+                    {(imagePreview || (match && existingImage)) && (
                         <img
-                            src={`/${existingImage}`}
+                            src={imagePreview || `/${existingImage}`}
                             className="w-24 h-24 object-cover mb-2 rounded"
+                            alt="Category preview"
                         />
                     )}
 
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) =>
-                            setImage(e.target.files ? e.target.files[0] : null)
-                        }
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                                setImage(e.target.files[0]);
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                    setImagePreview(event.target?.result as string);
+                                };
+                                reader.readAsDataURL(e.target.files[0]);
+                            }
+                        }}
                         className="border p-3 rounded w-full mb-4 focus:outline-none bg-white dark:bg-black/10 dark:border-gray-700 dark:text-white"
                     />
 

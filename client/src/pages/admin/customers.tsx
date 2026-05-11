@@ -18,7 +18,9 @@ export default function AdminCustomers() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/users/all");
+      const res = await axios.get("/api/admin/customers", {
+        withCredentials: true,
+      });
       setUsers(res.data.data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -33,7 +35,9 @@ export default function AdminCustomers() {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`/api/users/all/${id}`);
+      await axios.delete(`/api/admin/customers/${id}`, {
+        withCredentials: true,
+      });
 
       //  instant UI update (better UX)
       setUsers((prev) => prev.filter((u) => u._id !== id));

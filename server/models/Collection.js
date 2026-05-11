@@ -7,7 +7,9 @@ const collectionSchema = new mongoose.Schema(
         slug: { type: String, unique: true, trim: true },
         description: { type: String },
         image: [{ type: String }] ,
-        isActive: { type: Boolean, default: true }
+        isActive: { type: Boolean, default: true },
+        isFeatured: { type: Boolean, default: false },
+        category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }
     },
     { 
         timestamps: true

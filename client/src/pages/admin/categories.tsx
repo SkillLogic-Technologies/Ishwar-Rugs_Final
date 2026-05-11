@@ -107,7 +107,7 @@ export default function CategoriesPage() {
 
                 <td className="p-4">
                   <img
-                    src={`/${category.image}`}
+                    src={category.image}
                     className="w-14 h-14 object-cover rounded"
                   />
                 </td>

@@ -5,10 +5,7 @@ const routes = express.Router();
 
 routes.post('/login', loginUser);
 routes.post('/verify-otp', verifyLoginOtp);
-routes.get('/all', getAllUsers);
-routes.delete("/all/:id", deleteUser);
-routes.get('/me',isAuth, myProfile);
-
+routes.get('/me', isAuth, myProfile);
 routes.post("/logout", logoutUser);
 
 

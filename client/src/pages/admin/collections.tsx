@@ -111,11 +111,11 @@ export default function AdminCollections() {
                   <td className="p-4">
 
                     <img
-                      src={`/${
+                      src={
                         Array.isArray(collection.image)
                           ? collection.image[0]
                           : collection.image
-                      }`}
+                      }
                       className="w-14 h-14 object-cover rounded"
                     />
 

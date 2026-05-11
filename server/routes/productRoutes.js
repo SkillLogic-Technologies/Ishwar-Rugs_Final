@@ -14,7 +14,7 @@ const router = express.Router()
 
 router.route("/")
 .get(getProducts)
-.post(isAuth, isAdmin, upload.fields([
+.post(isAdmin, upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 6 }
   ]), createProduct)
@@ -24,11 +24,11 @@ router.get("/category/:slug", getProductsByCategorySlug);
 router.get("/collection/:slug", getProductsByCollectionSlug);
 
 router.route("/:id")
-.put(upload.fields([
+.put(isAdmin, upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 6 }
   ]), updateProduct)
-.delete(isAuth, isAdmin, deleteProduct)
+.delete(isAdmin, deleteProduct)
 
 
 // HEAD

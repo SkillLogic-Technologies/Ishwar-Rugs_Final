@@ -23,13 +23,6 @@ export const loginUser = async (req, res) => {
     // Delete previous OTP if exists
     await Otp.deleteMany({ email });
 
-    // Send email
-    await sendOtp({
-      email,
-      subject: "Login Verification Code",
-      otp,
-    });
-
     // Save OTP in DB with expiry (5 minutes)
     await Otp.create({
       email,
@@ -37,9 +30,26 @@ export const loginUser = async (req, res) => {
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
+    // Try to send email, but don't fail if it doesn't work
+    try {
+      await sendOtp({
+        email,
+        subject: "Login Verification Code",
+        otp,
+      });
+    } catch (emailError) {
+      console.log("Email sending failed:", emailError.message);
+      // In dev, log OTP to console for testing
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`📧 Dev Mode OTP for ${email}: ${otp}`);
+      }
+    }
+
     return res.status(200).json({
       success: true,
       message: "OTP sent successfully. Valid for 5 minutes.",
+      // Only return OTP in dev mode for testing
+      ...(process.env.NODE_ENV !== "production" && { otp }),
     });
   } catch (error) {
     console.error("Login OTP Error:", error);

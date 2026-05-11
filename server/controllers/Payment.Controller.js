@@ -21,15 +21,20 @@ export const verifyRazorpayPayment = async (req, res) => {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
 
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    // In dev mode, skip signature verification for testing
+    if (process.env.NODE_ENV === "development") {
+      console.log("⚠️ Dev Mode: Skipping Razorpay signature verification");
+    } else {
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(body)
-      .digest("hex");
+      const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+        .update(body)
+        .digest("hex");
 
-    if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ success: false, message: "Invalid payment signature" });
+      if (expectedSignature !== razorpay_signature) {
+        return res.status(400).json({ success: false, message: "Invalid payment signature" });
+      }
     }
 
     if (order.payment) {

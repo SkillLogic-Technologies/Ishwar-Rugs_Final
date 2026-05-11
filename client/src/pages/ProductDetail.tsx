@@ -154,7 +154,7 @@ const ProductDetail = () => {
               {galleryImages.map((img: string, index: number) => (
                 <img
                   key={index}
-                  src={`${BASE_URL}${img}`}
+                  src={img}
                   onClick={() => setActiveImage(index)}
                   className={`w-full h-20 object-cover rounded-md cursor-pointer border
                   ${activeImage === index ? "border-premium-gold" : "border-gray-300 dark:border-gray-700"}`}/>
@@ -167,7 +167,7 @@ const ProductDetail = () => {
               onMouseLeave={handleMouseLeave}>
               <img
                 ref={imgRef}
-                src={`${BASE_URL}${galleryImages[activeImage]}`}
+                src={galleryImages[activeImage]}
                 alt={product.title}
                 className="w-full h-[500px] object-cover transition-transform duration-200 ease-out"/>
               <button

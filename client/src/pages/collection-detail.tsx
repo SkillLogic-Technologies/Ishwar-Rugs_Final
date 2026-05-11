@@ -187,7 +187,7 @@ export default function CollectionDetails() {
 
               <div className="relative overflow-hidden">
                 <img
-                  src={`${BASE_URL}${product.images?.[0]}`}
+                  src={product.images?.[0]}
                   alt={product.title}
                   className="h-80 w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

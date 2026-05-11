@@ -1,5 +1,13 @@
 import Category from '../models/Category.js'
 import fs from "fs"
+import path from "path"
+
+// Helper function to convert absolute path to relative
+const getRelativePath = (absolutePath) => {
+  const normalized = absolutePath.replace(/\\/g, "/");
+  const match = normalized.match(/uploads\/.*$/);
+  return match ? "/" + match[0] : normalized;
+};
 
 // Create category...
 async function createCategory(req,res) {
@@ -18,7 +26,7 @@ async function createCategory(req,res) {
 
         let imagePath = null;
         if (req.file) {
-            imagePath = req.file.path.replace(/\\/g, "/");
+            imagePath = getRelativePath(req.file.path);
         }
 
         const category = await Category.create({ 
@@ -34,7 +42,15 @@ async function createCategory(req,res) {
 async function getCategories(req, res) {
     try {
         const categories = await Category.find();
-        res.status(200).json({ success: true, data: categories });
+        // Fix image paths - add leading slash if missing
+        const fixedCategories = categories.map(cat => {
+            const obj = cat.toObject();
+            return {
+                ...obj,
+                image: obj.image && !obj.image.startsWith('/') ? `/${obj.image}` : obj.image
+            };
+        });
+        res.status(200).json({ success: true, data: fixedCategories });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -65,15 +81,15 @@ async function updateCategory(req, res) {
         }
 
         if (req.file && category.image) {
-            const oldImagePath = category.image.replace(/\\/g, "/");
-            if (fs.existsSync(oldImagePath)) {
-                fs.unlinkSync(oldImagePath);
+            const fullPath = path.join(process.cwd(), "server", category.image);
+            if (fs.existsSync(fullPath)) {
+                fs.unlinkSync(fullPath);
             }
         }
         let newImagePath = category.image;
 
         if (req.file) {
-            newImagePath = req.file.path.replace(/\\/g, "/");
+            newImagePath = getRelativePath(req.file.path);
         }
 
         const updatedData = {

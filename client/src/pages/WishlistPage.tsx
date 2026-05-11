@@ -97,7 +97,7 @@ const WishlistPage = () => {
 
             <div className="relative overflow-hidden rounded-lg">
               <img
-                src={`${BASE_URL}${item.thumbnail}`}
+                src={item.thumbnail}
                 alt={item.title}
                 className="
                   w-full

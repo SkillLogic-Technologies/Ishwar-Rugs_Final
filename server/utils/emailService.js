@@ -2,9 +2,6 @@ import { createTransport } from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
 
-console.log("Email Config - GMAIL:", process.env.GMAIL);
-console.log("Email Config - PASSWORD exists:", !!process.env.PASSWORD);
-
 // Fix for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +14,8 @@ let transport = null;
 const getTransport = () => {
   if (!transport) {
     console.log("🔧 Initializing email transport...");
+    console.log("Email Config - GMAIL:", process.env.GMAIL ? "✅ Set" : "❌ Missing");
+    console.log("Email Config - PASSWORD exists:", !!process.env.PASSWORD);
     transport = createTransport({
       host: "smtp.gmail.com",
       port: 465,

@@ -4,13 +4,13 @@ import { Search, Sun, Moon, Menu } from "lucide-react";
 import logo from "../../../public/logo/Logo.png";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 
 export default function AdminNavbar({ setIsOpen }) {
   const { theme, setTheme } = useTheme();
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const adminName = localStorage.getItem("adminName") || "";
   const firstLetter = adminName.charAt(0).toUpperCase();
@@ -20,13 +20,13 @@ export default function AdminNavbar({ setIsOpen }) {
     const admin = localStorage.getItem("adminName");
 
     if (!admin) {
-      navigate("/admin/login");
+      setLocation("/admin/login");
     }
-  }, [navigate]);
+  }, [setLocation]);
 
   const handleLogout = () => {
     localStorage.removeItem("adminName");
-    navigate("/admin/login");
+    setLocation("/admin/login");
   };
 
   return (
@@ -39,7 +39,7 @@ export default function AdminNavbar({ setIsOpen }) {
       border-b border-gray-200 dark:border-neutral-800
     "
     >
-      <Link to="/">
+      <Link href="/">
         <img
           src={logo}
           alt="IshwarRugs Logo"
@@ -55,14 +55,14 @@ export default function AdminNavbar({ setIsOpen }) {
           placeholder="Search here"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              navigate(`/admin/products?title=${search}`);
+              setLocation(`/admin/products?title=${search}`);
             }
           }}
           className="rounded-l-md px-2 md:px-4 w-[80%] h-full outline-none text-black"
         />
 
         <button
-          onClick={() => navigate(`/admin/products?title=${search}`)}
+          onClick={() => setLocation(`/admin/products?title=${search}`)}
           className="
           bg-warm-gold px-4 py-3 text-white flex items-center
           hover:opacity-90 transition rounded-r-md

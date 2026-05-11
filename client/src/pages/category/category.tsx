@@ -105,10 +105,10 @@ export default function CategoryPage() {
   }, [slug]);
 
   const getProductImage = (product: Product) => {
-    if (product.thumbnail) return `${BASE_URL}${product.thumbnail}`;
+    if (product.thumbnail) return product.thumbnail;
     if (product.images && product.images.length > 0)
-      return `${BASE_URL}${product.images[0]}`;
-    return "/no-image.png"; 
+      return product.images[0];
+    return "/no-image.png";
   };
 
   if (loading) {

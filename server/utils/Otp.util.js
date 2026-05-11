@@ -1,6 +1,11 @@
 import { createTransport } from "nodemailer";
 
 const sendOtp = async ({ email, subject, otp }) => {
+  console.log("📧 OTP Utility - Environment Check:");
+  console.log("  GMAIL:", process.env.GMAIL ? "✅ Set" : "❌ Missing");
+  console.log("  PASSWORD:", process.env.PASSWORD ? "✅ Set" : "❌ Missing");
+  console.log("  NODE_ENV:", process.env.NODE_ENV);
+
   const transport = createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -98,12 +103,19 @@ const sendOtp = async ({ email, subject, otp }) => {
 `;
 
 
-  await transport.sendMail({
-    from: process.env.GMAIL,
-    to: email,
-    subject,
-    html,
-  });
+  try {
+    const result = await transport.sendMail({
+      from: process.env.GMAIL,
+      to: email,
+      subject,
+      html,
+    });
+    console.log("✅ OTP Email sent successfully to:", email, "Message ID:", result.messageId);
+    return result;
+  } catch (error) {
+    console.error("❌ OTP Email sending failed:", error.message);
+    throw error;
+  }
 };
 
 

@@ -2,6 +2,14 @@ import Product from "../models/Product.js";
 import Category from "../models/Category.js";
 import Collection from "../models/Collection.js";
 import fs from "fs"
+import path from "path"
+
+// Helper function to convert absolute path to relative
+const getRelativePath = (absolutePath) => {
+  const normalized = absolutePath.replace(/\\/g, "/");
+  const match = normalized.match(/uploads\/.*$/);
+  return match ? "/" + match[0] : normalized;
+};
 
 // create product...
 async function createProduct(req, res) {
@@ -25,10 +33,10 @@ async function createProduct(req, res) {
         data.category = categoryDoc._id;
 
         if (req.files?.thumbnail?.length > 0) {
-            data.thumbnail = req.files.thumbnail[0].path.replace(/\\/g, "/");;
+            data.thumbnail = getRelativePath(req.files.thumbnail[0].path);
         }
         if (req.files?.images?.length > 0) {
-            data.images = req.files.images.map(file => file.path.replace(/\\/g, "/"));
+            data.images = req.files.images.map(file => getRelativePath(file.path));
         }
 
         const product = await Product.create(data)
@@ -71,10 +79,20 @@ async function getProducts(req, res) {
         const products = await Product.find(filter).populate("category", "name").skip(skip).limit(limit);
         const totalPages = Math.ceil(totalProducts / limit);
 
-        res.status(200).json({success: true, data: products, totalProducts, currentPage: page, totalPages})
+        // Fix image paths - add leading slash if missing
+        const fixedProducts = products.map(prod => {
+            const obj = prod.toObject();
+            return {
+                ...obj,
+                thumbnail: obj.thumbnail && !obj.thumbnail.startsWith('/') ? `/${obj.thumbnail}` : obj.thumbnail,
+                images: Array.isArray(obj.images) ? obj.images.map(img => img.startsWith('/') ? img : `/${img}`) : []
+            };
+        });
+
+        res.status(200).json({success: true, data: fixedProducts, totalProducts, currentPage: page, totalPages})
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
-    }  
+    }
 }
 
 // get product by slug..
@@ -84,7 +102,13 @@ async function getProductBySlug(req, res){
         if(!product){
             return res.status(404).json({ success: false, message: "Product not found" })
         }
-        res.status(200).json({ success: true, data: product })    
+        const obj = product.toObject();
+        const fixedProduct = {
+            ...obj,
+            thumbnail: obj.thumbnail && !obj.thumbnail.startsWith('/') ? `/${obj.thumbnail}` : obj.thumbnail,
+            images: Array.isArray(obj.images) ? obj.images.map(img => img.startsWith('/') ? img : `/${img}`) : []
+        };
+        res.status(200).json({ success: true, data: fixedProduct })
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -102,7 +126,16 @@ async function getProductsByCategorySlug(req,res){
 
         const products = await Product.find({ category: category._id });
 
-        return res.status(200).json({ success: true, category: category.name, data: products});
+        const fixedProducts = products.map(prod => {
+            const obj = prod.toObject();
+            return {
+                ...obj,
+                thumbnail: obj.thumbnail && !obj.thumbnail.startsWith('/') ? `/${obj.thumbnail}` : obj.thumbnail,
+                images: Array.isArray(obj.images) ? obj.images.map(img => img.startsWith('/') ? img : `/${img}`) : []
+            };
+        });
+
+        return res.status(200).json({ success: true, category: category.name, data: fixedProducts});
 
   } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
@@ -121,7 +154,16 @@ async function getProductsByCollectionSlug(req,res){
 
         const products = await Product.find({ collection: collection._id });
 
-        return res.status(200).json({ success: true, collection: collection.name, data: products});
+        const fixedProducts = products.map(prod => {
+            const obj = prod.toObject();
+            return {
+                ...obj,
+                thumbnail: obj.thumbnail && !obj.thumbnail.startsWith('/') ? `/${obj.thumbnail}` : obj.thumbnail,
+                images: Array.isArray(obj.images) ? obj.images.map(img => img.startsWith('/') ? img : `/${img}`) : []
+            };
+        });
+
+        return res.status(200).json({ success: true, collection: collection.name, data: fixedProducts});
 
   } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
@@ -143,34 +185,33 @@ async function updateProduct(req, res) {
         if (req.files?.thumbnail?.length > 0) {
 
   if (product.thumbnail) {
-    const oldThumbnail = product.thumbnail.replace(/\\/g, "/");
+    const fullPath = path.join(process.cwd(), "server", product.thumbnail);
 
-    if (fs.existsSync(oldThumbnail)) {
-      fs.unlinkSync(oldThumbnail);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
     }
   }
 
-  updatedData.thumbnail =
-    req.files.thumbnail[0].path.replace(/\\/g, "/");
+  updatedData.thumbnail = getRelativePath(req.files.thumbnail[0].path);
 
 } else {
-  
+
   updatedData.thumbnail = product.thumbnail;
 }
        if (req.files?.images?.length > 0) {
 
   if (product.images?.length) {
     product.images.forEach((img) => {
-      const oldImg = img.replace(/\\/g, "/");
+      const fullPath = path.join(process.cwd(), "server", img);
 
-      if (fs.existsSync(oldImg)) {
-        fs.unlinkSync(oldImg);
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
       }
     });
   }
   updatedData.images =
     req.files.images.map((file) =>
-      file.path.replace(/\\/g, "/")
+      getRelativePath(file.path)
     );
 
 } else {

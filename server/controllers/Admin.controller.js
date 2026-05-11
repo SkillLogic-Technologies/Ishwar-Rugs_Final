@@ -123,9 +123,9 @@ export const getAdminProfile = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   try {
-    res.cookie("userToken", "", {
+    res.cookie("adminToken", "", {
       httpOnly: true,
-      expires: new Date(0), // immediately expire
+      expires: new Date(0),
     });
 
     res.status(200).json({

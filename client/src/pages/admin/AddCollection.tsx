@@ -18,6 +18,7 @@ export default function AddCollection() {
 
   const [collectionId, setCollectionId] = useState<string>("");
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const [existingThumbnail, setExistingThumbnail] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
@@ -187,10 +188,11 @@ export default function AddCollection() {
             Image
           </h2>
 
-          {match && existingThumbnail && (
+          {(thumbnailPreview || (match && existingThumbnail)) && (
             <img
-              src={`/${existingThumbnail}`}
+              src={thumbnailPreview || `/${existingThumbnail}`}
               className="w-24 h-24 object-cover mb-3 rounded border dark:border-neutral-700"
+              alt="Collection preview"
             />
           )}
 
@@ -200,6 +202,13 @@ export default function AddCollection() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const file = e.target.files?.[0] || null;
               setThumbnail(file);
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  setThumbnailPreview(event.target?.result as string);
+                };
+                reader.readAsDataURL(file);
+              }
             }}
             className="border border-gray-300 dark:border-neutral-700 p-3 rounded w-full focus:outline-none bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
           />

@@ -1,5 +1,13 @@
 import Collection from '../models/Collection.js'
 import fs from "fs"
+import path from "path"
+
+// Helper function to convert absolute path to relative
+const getRelativePath = (absolutePath) => {
+  const normalized = absolutePath.replace(/\\/g, "/");
+  const match = normalized.match(/uploads\/.*$/);
+  return match ? "/" + match[0] : normalized;
+};
 
 // Create collection...
 async function createCollection(req,res) {
@@ -19,7 +27,7 @@ async function createCollection(req,res) {
         let imagePaths = [];
 
         if (req.files && req.files.length > 0) {
-            imagePaths = req.files.map(file => file.path.replace(/\\/g, "/"));
+            imagePaths = req.files.map(file => getRelativePath(file.path));
         }
 
         const collection = await Collection.create({ 
@@ -43,8 +51,32 @@ async function createCollection(req,res) {
 // Get all Collections..
 async function getCollections(req, res) {
     try {
-        const collections = await Collection.find();
-        res.status(200).json({ success: true, data: collections });
+        const { isFeatured, category } = req.query;
+        let filter = {};
+
+        if (isFeatured === 'true') {
+            filter.isFeatured = true;
+        }
+
+        if (category) {
+            filter.category = category;
+        }
+
+        const collections = await Collection.find(filter);
+        // Add heroImage field and fix image paths for frontend compatibility
+        const collectionsWithHeroImage = collections.map(col => {
+            const obj = col.toObject();
+            // Fix image paths - add leading slash if missing
+            const fixedImages = obj.image && Array.isArray(obj.image)
+                ? obj.image.map(img => img.startsWith('/') ? img : `/${img}`)
+                : [];
+            return {
+                ...obj,
+                image: fixedImages,
+                heroImage: fixedImages.length > 0 ? fixedImages[0] : null
+            };
+        });
+        res.status(200).json({ success: true, data: collectionsWithHeroImage });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
@@ -79,15 +111,15 @@ async function updateCollection(req, res) {
 
             if (collection.image && collection.image.length > 0) {
                 collection.image.forEach(img => {
-                    const oldPath = img.replace(/\\/g, "/");
-                    if (fs.existsSync(oldPath)) {
-                        fs.unlinkSync(oldPath);
+                    const fullPath = path.join(process.cwd(), "server", img);
+                    if (fs.existsSync(fullPath)) {
+                        fs.unlinkSync(fullPath);
                     }
                 });
             }
 
             const newImages = req.files.map(file =>
-                file.path.replace(/\\/g, "/")
+                getRelativePath(file.path)
             );
 
             collection.image = newImages;
