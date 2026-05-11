@@ -21,7 +21,12 @@ import dashboardStatsRoutes from './routes/dashboardStatsRoutes.js';
 import { attachGuestId } from "./middlewares/guestId.middleware.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Load .env if present (dev), in production Hostinger injects env vars directly
 dotenv.config({ path: path.join(__dirname, ".env") });
+
+// Log env check
+console.log("🔑 MONGO_URI set:", !!process.env.MONGO_URI);
+console.log("🔑 PORT:", process.env.PORT);
 
 const app = express();
 connectDB();
