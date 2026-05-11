@@ -66,14 +66,29 @@ app.use('/api/admin', dashboardStatsRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Serve frontend static build
-const distPath = path.join(__dirname, "public");
+import fs from "fs";
 
-console.log("📁 Serving static from:", distPath);
-app.use(express.static(distPath));
+const possiblePaths = [
+  path.join(__dirname, "public"),
+  path.join(process.cwd(), "server/public"),
+  path.join(process.cwd(), "dist/public"),
+];
 
-// SPA fallback — all non-API routes go to React
-app.get("*", (req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
+const distPath = possiblePaths.find(p => fs.existsSync(path.join(p, "index.html"))) || possiblePaths[0];
+console.log("📁 Static path:", distPath, "| exists:", fs.existsSync(distPath));
+
+app.use(express.static(distPath, { index: false }));
+
+// SPA fallback — only for non-file routes
+app.get("*", (req, res, next) => {
+  const ext = path.extname(req.path);
+  if (ext && ext !== ".html") return next();
+  const indexFile = path.join(distPath, "index.html");
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.status(500).json({ error: "index.html not found", distPath, cwd: process.cwd(), __dirname });
+  }
 });
 
 const PORT = Number(process.env.PORT) || 5000;
