@@ -5,6 +5,9 @@ server/public
 vite.config.ts.*
 *.tar.gz
 
+# Large zip files
+*.zip
+
 # Debug/test files
 add-hosts.ps1
 check-network.js
