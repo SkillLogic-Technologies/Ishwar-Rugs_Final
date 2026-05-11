@@ -65,23 +65,15 @@ app.use('/api/admin', dashboardStatsRoutes);
 // Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Serve frontend static build — try both possible paths
-const distPath1 = path.join(process.cwd(), "dist/public");
-const distPath2 = path.join(__dirname, "../dist/public");
-import fs from "fs";
-const distPath = fs.existsSync(distPath1) ? distPath1 : distPath2;
+// Serve frontend static build
+const distPath = path.join(__dirname, "public");
 
 console.log("📁 Serving static from:", distPath);
 app.use(express.static(distPath));
 
 // SPA fallback — all non-API routes go to React
 app.get("*", (req, res) => {
-  const indexFile = path.join(distPath, "index.html");
-  if (fs.existsSync(indexFile)) {
-    res.sendFile(indexFile);
-  } else {
-    res.status(404).json({ error: "Frontend not built", distPath, cwd: process.cwd() });
-  }
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 const PORT = Number(process.env.PORT) || 5000;
