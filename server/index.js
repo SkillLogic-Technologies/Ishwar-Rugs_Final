@@ -58,13 +58,34 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Frontend static files — server/public folder
 const distPath = path.join(__dirname, "public");
-console.log("📁 distPath:", distPath, "| index exists:", fs.existsSync(path.join(distPath, "index.html")));
+const indexExists = fs.existsSync(path.join(distPath, "index.html"));
+console.log("📁 __dirname:", __dirname);
+console.log("📁 distPath:", distPath);
+console.log("📁 index.html exists:", indexExists);
+console.log("📁 cwd:", process.cwd());
+
+// Debug route — visit /debug to see paths
+app.get("/debug", (req, res) => {
+  const items = fs.existsSync(distPath) ? fs.readdirSync(distPath) : [];
+  res.json({
+    __dirname,
+    distPath,
+    indexExists,
+    cwd: process.cwd(),
+    distContents: items,
+  });
+});
 
 app.use(express.static(distPath));
 
 // SPA fallback
 app.get("*", (req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
+  const indexFile = path.join(distPath, "index.html");
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.status(500).send(`index.html not found at ${distPath}. cwd=${process.cwd()}`);
+  }
 });
 
 const PORT = Number(process.env.PORT) || 5000;
